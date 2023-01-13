@@ -2,6 +2,8 @@ import * as React from "react";
 import { ScrollView } from "react-native";
 import { DataTable } from "react-native-paper";
 import TableStyles from "./styles";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Colors from "../../themes/colors";
 
 const optionsPerPage = [2, 3, 4];
 
@@ -29,6 +31,9 @@ const Table = (props) => {
               <DataTable.Cell>{row.fonte}</DataTable.Cell>
               <DataTable.Cell>{row.valor}</DataTable.Cell>
               <DataTable.Cell>{row.data}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                <MaterialIcons name="edit" color={Colors.green100} size={26} />
+              </DataTable.Cell>
             </DataTable.Row>
           );
         })}

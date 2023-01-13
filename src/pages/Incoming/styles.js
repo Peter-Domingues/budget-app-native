@@ -5,7 +5,9 @@ const IncomingStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+    backgroundColor: "#e0efdd",
   },
+  view: { padding: "15px", width: "100%" },
   max: {
     maxHeight: "80vh",
     width: "100%",

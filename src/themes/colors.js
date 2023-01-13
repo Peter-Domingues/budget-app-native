@@ -1,7 +1,7 @@
 const Colors = {
   green100: "#35794b",
   white: "#fff",
-  background: "rgb(242, 242, 242)",
+  red: "#d81f1f",
   card: "rgb(255, 255, 255)",
   text: "rgb(28, 28, 30)",
   border: "rgb(199, 199, 204)",

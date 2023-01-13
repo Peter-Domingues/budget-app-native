@@ -3,8 +3,9 @@ import Colors from "../../themes/colors";
 
 const TableStyles = StyleSheet.create({
   maxScroll: {
-    maxHeight: "70%",
+    maxHeight: "65%",
     width: "100%",
+    backgroundColor: Colors.white,
   },
   header: {
     backgroundColor: Colors.green100,

@@ -3,7 +3,11 @@ import Colors from "../../themes/colors";
 
 const TitleWithButtonsStyles = StyleSheet.create({
   container: {
-    padding: "15px",
+    paddingBottom: "15px",
+    display: "flex",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   title: {
     textAlign: "center",

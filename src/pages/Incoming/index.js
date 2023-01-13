@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import Table from "../../componets/Table";
 import TitleWithButtons from "../../componets/TitleWithButtons";
 import IncomingStyles from "./styles";
@@ -40,8 +40,10 @@ const Incoming = () => {
 
   return (
     <SafeAreaView style={IncomingStyles.container}>
-      <TitleWithButtons title="Renda" />
-      <Table header={header} rows={rows} />
+      <View style={IncomingStyles.view}>
+        <TitleWithButtons title="Renda" />
+        <Table header={header} rows={rows} />
+      </View>
     </SafeAreaView>
   );
 };
