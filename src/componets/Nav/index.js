@@ -7,15 +7,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Home from "../../pages/Home";
 import Wallet from "../../pages/Wallet";
 import Incoming from "../../pages/Incoming";
+import Colors from "../../themes/colors";
 
 const Tab = createBottomTabNavigator();
 
 const Nav = () => {
   return (
     <Tab.Navigator
+      initialRouteName="Renda"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#35794b",
+        tabBarActiveTintColor: Colors.green100,
         tabBarInactiveTintColor: "#666666",
         tabBarItemStyle: { marginBottom: 8, marginTop: 8 },
         tabBarStyle: { height: 60 },
@@ -32,7 +34,7 @@ const Nav = () => {
         }}
       />
       <Tab.Screen
-        name="Notifications"
+        name="Renda"
         component={Incoming}
         options={{
           tabBarLabel: "Renda",

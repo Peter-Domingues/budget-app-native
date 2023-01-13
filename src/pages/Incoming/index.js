@@ -1,8 +1,7 @@
 import * as React from "react";
-import { ScrollView, SafeAreaView, Text } from "react-native";
-import { DataTable } from "react-native-paper";
-import { View } from "react-native-web";
+import { SafeAreaView, Text } from "react-native";
 import Table from "../../componets/Table";
+import TitleWithButtons from "../../componets/TitleWithButtons";
 import IncomingStyles from "./styles";
 
 const optionsPerPage = [2, 3, 4];
@@ -41,10 +40,8 @@ const Incoming = () => {
 
   return (
     <SafeAreaView style={IncomingStyles.container}>
-      <Text>Renda</Text>
-      <ScrollView style={IncomingStyles.max}>
-        <Table header={header} rows={rows} />
-      </ScrollView>
+      <TitleWithButtons title="Renda" />
+      <Table header={header} rows={rows} />
     </SafeAreaView>
   );
 };
