@@ -12,7 +12,7 @@ const TitleWithButtonsStyles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    color: "#35794b",
+    color: Colors.green100,
     fontSize: 20,
   },
 });

@@ -93,10 +93,14 @@ const Incoming = () => {
     setOpenModal(true);
   };
 
+  const handleAdd = () => {
+    setOpenModal(true);
+  };
+
   return (
     <SafeAreaView style={IncomingStyles.container}>
       <View style={IncomingStyles.view}>
-        <TitleWithButtons title="Renda" />
+        <TitleWithButtons title="Renda" onAdd={handleAdd} />
         <ModalDefault open={openModal} onDismiss={() => setOpenModal(false)}>
           <Text>Add sua renda</Text>
           <Controller
@@ -119,14 +123,6 @@ const Incoming = () => {
             rules={{ required: true }}
             control={control}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
-              // <TextInput
-              //   onChangeText={onChange}
-              //   value={value}
-              //   label="Valor"
-              //   error={!!error}
-              //   helperText={error && error.message}
-              //   style={{ backgroundColor: "transparent" }}
-              // />
               <CurrencyInput
                 value={value}
                 onChangeValue={onChange}
