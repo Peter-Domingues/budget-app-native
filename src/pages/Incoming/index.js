@@ -14,31 +14,33 @@ const Incoming = () => {
   const [openModal, setOpenModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState(false);
+  const [activateDelete, setActivateDelete] = useState(false);
 
   const header = [
+    { title: "", isNumeric: false },
     { title: "Fonte", isNumeric: false },
     { title: "Valor", isNumeric: true },
     { title: "Data", isNumeric: false },
     { title: "", isNumeric: false },
   ];
-  const rows = [
-    { font: "Agua", amount: 200, dueDate: "01/16/23" },
-    { font: "Luz", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
-    { font: "Teste", amount: 200, dueDate: "01/16/23" },
-  ];
+  const [rows, setRows] = useState([
+    { font: "Agua", amount: 200, dueDate: "01/16/23", isChecked: true },
+    { font: "Luz", amount: 450, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 120, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
+    { font: "Teste", amount: 200, dueDate: "01/16/23", isChecked: false },
+  ]);
 
   const { control, handleSubmit, reset, setValue, trigger } = useForm({
     defaultValues: {
@@ -102,10 +104,27 @@ const Incoming = () => {
     setOpenModal(false);
   };
 
+  const onCheck = async (index) => {
+    const newRows = [...rows];
+    newRows[index].isChecked = !newRows[index].isChecked;
+    setRows(newRows);
+  };
+
+  const handleDelete = async (index) => {
+    const newRows = [...rows];
+    newRows.splice(index, 1);
+    setRows(newRows);
+  };
+
   return (
     <SafeAreaView style={IncomingStyles.container}>
       <View style={IncomingStyles.view}>
-        <TitleWithButtons title="Renda" onAdd={handleAdd} />
+        <TitleWithButtons
+          title="Renda"
+          onAdd={handleAdd}
+          onDelete={() => setActivateDelete(!activateDelete)}
+          activateDelete={activateDelete}
+        />
         <ModalDefault open={openModal} onDismiss={handleCancel}>
           <Text style={IncomingStyles.title}>Add sua renda</Text>
           <Controller
@@ -168,7 +187,14 @@ const Incoming = () => {
             Submit
           </Button>
         </ModalDefault>
-        <Table header={header} rows={rows} onEdit={handleEdit} />
+        <Table
+          header={header}
+          rows={rows}
+          onEdit={handleEdit}
+          onCheck={onCheck}
+          activateDelete={activateDelete}
+          onDelete={handleDelete}
+        />
       </View>
     </SafeAreaView>
   );

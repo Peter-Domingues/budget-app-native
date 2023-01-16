@@ -3,7 +3,7 @@ import Colors from "../../themes/colors";
 
 const TableStyles = StyleSheet.create({
   maxScroll: {
-    maxHeight: "65%",
+    maxHeight: "80%",
     width: "100%",
     backgroundColor: Colors.white,
   },
@@ -12,6 +12,9 @@ const TableStyles = StyleSheet.create({
   },
   headerText: {
     color: "white",
+  },
+  crossedTitle: {
+    textDecorationLine: "line-through",
   },
 });
 

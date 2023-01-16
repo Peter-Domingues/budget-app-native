@@ -10,10 +10,14 @@ const TitleWithButtons = (props) => {
     <View style={TitleWithButtonsStyles.container}>
       <IconButton
         icon={() => (
-          <MaterialIcons name="delete-forever" color={Colors.red} size={26} />
+          <MaterialIcons
+            name={props.activateDelete ? "close" : "delete-forever"}
+            color={Colors.red}
+            size={26}
+          />
         )}
         size={20}
-        onPress={props.Delete}
+        onPress={props.onDelete}
       />
       <Text style={TitleWithButtonsStyles.title}>{props.title}</Text>
       <IconButton
