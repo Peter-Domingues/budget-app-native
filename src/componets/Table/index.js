@@ -21,7 +21,7 @@ const Table = (props) => {
             <DataTable.Row pointerEvents="auto" key={index}>
               <DataTable.Cell>{row.font}</DataTable.Cell>
               <DataTable.Cell>{row.amount}</DataTable.Cell>
-              <DataTable.Cell>{row.data}</DataTable.Cell>
+              <DataTable.Cell>{row.dueDate}</DataTable.Cell>
               <View>
                 <IconButton
                   icon={() => (

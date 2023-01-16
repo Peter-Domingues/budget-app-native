@@ -6,17 +6,15 @@ import ModalDefault from "../../componets/Modal";
 import Table from "../../componets/Table";
 import TitleWithButtons from "../../componets/TitleWithButtons";
 import IncomingStyles from "./styles";
-import { useForm, Controller, useController } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import CurrencyInput from "react-native-currency-input";
-
-const optionsPerPage = [2, 3, 4];
 
 const Incoming = () => {
   const [date, setDate] = useState(new Date());
   const [openModal, setOpenModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
+
   const header = [
     { title: "Fonte", isNumeric: false },
     { title: "Valor", isNumeric: true },
@@ -24,25 +22,25 @@ const Incoming = () => {
     { title: "", isNumeric: false },
   ];
   const rows = [
-    { font: "Agua", amount: 200, data: "1213" },
-    { font: "Luz", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Fonte", amount: 200, data: "1213" },
-    { font: "Teste", amount: 200, data: "1213" },
+    { font: "Agua", amount: 200, dueDate: "01/16/23" },
+    { font: "Luz", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Fonte", amount: 200, dueDate: "01/16/23" },
+    { font: "Teste", amount: 200, dueDate: "01/16/23" },
   ];
 
-  const { control, handleSubmit, reset, setValue } = useForm({
+  const { control, handleSubmit, reset, setValue, trigger } = useForm({
     defaultValues: {
       font: "",
       amount: "",
@@ -79,17 +77,19 @@ const Incoming = () => {
     //       });
   };
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+    const currentDate = selectedDate.toLocaleDateString("pt-BR");
+    setValue("dueDate", currentDate);
     setOpenDatePicker(false);
-    setDate(currentDate);
+    setDate(selectedDate);
+    trigger("dueDate");
   };
 
   const handleEdit = async (row) => {
     console.log(row);
     setValue("font", row.font);
     setValue("amount", row.amount.toString());
+    setValue("dueDate", row.dueDate);
     setEdit(true);
-    // setCurrentRowId(row.id);
     setOpenModal(true);
   };
 
@@ -97,12 +97,17 @@ const Incoming = () => {
     setOpenModal(true);
   };
 
+  const handleCancel = () => {
+    reset();
+    setOpenModal(false);
+  };
+
   return (
     <SafeAreaView style={IncomingStyles.container}>
       <View style={IncomingStyles.view}>
         <TitleWithButtons title="Renda" onAdd={handleAdd} />
-        <ModalDefault open={openModal} onDismiss={() => setOpenModal(false)}>
-          <Text>Add sua renda</Text>
+        <ModalDefault open={openModal} onDismiss={handleCancel}>
+          <Text style={IncomingStyles.title}>Add sua renda</Text>
           <Controller
             name="font"
             rules={{ required: true }}
@@ -141,19 +146,23 @@ const Incoming = () => {
               />
             )}
           />
-
-          <TextInput
-            label=""
-            value={date.toLocaleDateString("pt-BR")}
-            onFocus={() => setOpenDatePicker(true)}
-            style={{ backgroundColor: "transparent" }}
+          <Controller
+            name="dueDate"
+            rules={{ required: true }}
+            control={control}
+            render={({ field: { value }, fieldState: { error } }) => (
+              <TextInput
+                label="Vencimento"
+                error={!!error}
+                value={value}
+                onFocus={() => setOpenDatePicker(true)}
+                style={{ backgroundColor: "transparent" }}
+              />
+            )}
           />
+
           {openDatePicker && (
-            <RNDateTimePicker
-              value={date}
-              onChange={onChange}
-              dateFormat="dayofweek day month"
-            />
+            <RNDateTimePicker value={date} onChange={onChange} />
           )}
           <Button type="submit" onPress={handleSubmit(onSubmit)}>
             Submit
