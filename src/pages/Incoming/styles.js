@@ -7,7 +7,7 @@ const IncomingStyles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#e0efdd",
   },
-  view: { padding: "15px", width: "100%" },
+  view: { padding: 15, width: "100%" },
   max: {
     maxHeight: "80vh",
     width: "100%",

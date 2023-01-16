@@ -19,8 +19,8 @@ const Table = (props) => {
         {props.rows.map((row, index) => {
           return (
             <DataTable.Row pointerEvents="auto" key={index}>
-              <DataTable.Cell>{row.fonte}</DataTable.Cell>
-              <DataTable.Cell>{row.valor}</DataTable.Cell>
+              <DataTable.Cell>{row.font}</DataTable.Cell>
+              <DataTable.Cell>{row.amount}</DataTable.Cell>
               <DataTable.Cell>{row.data}</DataTable.Cell>
               <View>
                 <IconButton
@@ -32,7 +32,7 @@ const Table = (props) => {
                     />
                   )}
                   size={20}
-                  onPress={props.onEdit}
+                  onPress={() => props.onEdit(row)}
                 />
               </View>
             </DataTable.Row>
