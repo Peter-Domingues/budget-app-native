@@ -1,17 +1,18 @@
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState, useEffect } from "react";
+import RNDateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
 import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import ModalDefault from "../../components/Modal";
 import Table from "../../components/Table";
 import TitleWithButtons from "../../components/TitleWithButtons";
-import Teste from "./styles";
 import { useForm, Controller } from "react-hook-form";
 import CurrencyInput from "react-native-currency-input";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 
 const Incoming = () => {
-  const [date, setDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [openModal, setOpenModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState(false);
@@ -51,7 +52,7 @@ const Incoming = () => {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
     // const payload = {
     //   font: data.font,
@@ -79,15 +80,15 @@ const Incoming = () => {
     //         reset();
     //       });
   };
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate.toLocaleDateString("pt-BR");
+  const onChange = (event: DateTimePickerEvent, date?: Date) => {
+    const currentDate = date?.toLocaleDateString("pt-BR") || "";
     setValue("dueDate", currentDate);
     setOpenDatePicker(false);
-    setDate(selectedDate);
+    setCurrentDate(date || new Date());
     trigger("dueDate");
   };
 
-  const handleEdit = async (row) => {
+  const handleEdit = async (row: any) => {
     console.log(row);
     setValue("font", row.font);
     setValue("amount", row.amount.toString());
@@ -105,13 +106,13 @@ const Incoming = () => {
     setOpenModal(false);
   };
 
-  const onCheck = async (index) => {
+  const onCheck = async (index: number) => {
     const newRows = [...rows];
     newRows[index].isChecked = !newRows[index].isChecked;
     setRows(newRows);
   };
 
-  const handleDelete = async (index) => {
+  const handleDelete = async (index: number) => {
     const newRows = [...rows];
     newRows.splice(index, 1);
     setRows(newRows);
@@ -126,7 +127,7 @@ const Incoming = () => {
         activateDelete={activateDelete}
       />
       <ModalDefault open={openModal} onDismiss={handleCancel}>
-        <Text style={Teste.title}>Add sua renda</Text>
+        <Text>Add sua renda</Text>
         <Controller
           name="font"
           rules={{ required: true }}
@@ -137,8 +138,9 @@ const Incoming = () => {
               value={value}
               label="Fonte"
               error={!!error}
-              helperText={error && error.message}
               style={{ backgroundColor: "transparent" }}
+              accessibilityLabelledBy={undefined}
+              accessibilityLanguage={undefined}
             />
           )}
         />
@@ -148,18 +150,19 @@ const Incoming = () => {
           control={control}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <CurrencyInput
-              value={value}
+              value={parseInt(value)}
               onChangeValue={onChange}
               prefix="R$"
               delimiter="."
               separator=","
-              error={!!error}
-              label="Valor"
               precision={2}
-              renderTextInput={(textInputProps) => (
+              renderTextInput={() => (
                 <TextInput
-                  {...textInputProps}
+                  accessibilityLabelledBy={undefined}
+                  accessibilityLanguage={undefined}
                   style={{ backgroundColor: "transparent" }}
+                  label="Valor"
+                  error={!!error}
                 />
               )}
             />
@@ -176,16 +179,16 @@ const Incoming = () => {
               value={value}
               onFocus={() => setOpenDatePicker(true)}
               style={{ backgroundColor: "transparent" }}
+              accessibilityLabelledBy={undefined}
+              accessibilityLanguage={undefined}
             />
           )}
         />
 
         {openDatePicker && (
-          <RNDateTimePicker value={date} onChange={onChange} />
+          <RNDateTimePicker value={currentDate} onChange={onChange} />
         )}
-        <Button type="submit" onPress={handleSubmit(onSubmit)}>
-          Submit
-        </Button>
+        <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
       </ModalDefault>
       <Table
         header={header}
