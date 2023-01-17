@@ -1,13 +1,13 @@
 import React from "react";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
-import { Button } from "react-native-paper";
+import AppCalculator from "../../components/AppCalculator";
 
-const Wallet = () => {
+const Compute = () => {
   return (
     <SafeAreaCustomized>
-      <Button title="Go Home" onPress={() => navigation.navigate("Home")} />
+      <AppCalculator />
     </SafeAreaCustomized>
   );
 };
 
-export default Wallet;
+export default Compute;

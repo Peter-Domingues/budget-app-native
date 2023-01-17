@@ -8,13 +8,14 @@ import Home from "../../pages/Home";
 import Wallet from "../../pages/Wallet";
 import Incoming from "../../pages/Incoming";
 import Colors from "../../themes/colors";
+import Compute from "../../pages/Compute";
 
 const Tab = createBottomTabNavigator();
 
 const Nav = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Renda"
+      initialRouteName="Calculadora"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.green100,
@@ -75,9 +76,9 @@ const Nav = () => {
       />
       <Tab.Screen
         name="Calculadora"
-        component={Home}
+        component={Compute}
         options={{
-          tabBarLabel: "Gastos",
+          tabBarLabel: "Calculadora",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="calculator" color={color} size={26} />
           ),

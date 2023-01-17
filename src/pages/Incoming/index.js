@@ -1,13 +1,14 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Text } from "react-native";
+import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import ModalDefault from "../../componets/Modal";
-import Table from "../../componets/Table";
-import TitleWithButtons from "../../componets/TitleWithButtons";
-import IncomingStyles from "./styles";
+import ModalDefault from "../../components/Modal";
+import Table from "../../components/Table";
+import TitleWithButtons from "../../components/TitleWithButtons";
+import Teste from "./styles";
 import { useForm, Controller } from "react-hook-form";
 import CurrencyInput from "react-native-currency-input";
+import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 
 const Incoming = () => {
   const [date, setDate] = useState(new Date());
@@ -117,86 +118,84 @@ const Incoming = () => {
   };
 
   return (
-    <SafeAreaView style={IncomingStyles.container}>
-      <View style={IncomingStyles.view}>
-        <TitleWithButtons
-          title="Renda"
-          onAdd={handleAdd}
-          onDelete={() => setActivateDelete(!activateDelete)}
-          activateDelete={activateDelete}
-        />
-        <ModalDefault open={openModal} onDismiss={handleCancel}>
-          <Text style={IncomingStyles.title}>Add sua renda</Text>
-          <Controller
-            name="font"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextInput
-                onChangeText={onChange}
-                value={value}
-                label="Fonte"
-                error={!!error}
-                helperText={error && error.message}
-                style={{ backgroundColor: "transparent" }}
-              />
-            )}
-          />
-          <Controller
-            name="amount"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <CurrencyInput
-                value={value}
-                onChangeValue={onChange}
-                prefix="R$"
-                delimiter="."
-                separator=","
-                error={!!error}
-                label="Valor"
-                precision={2}
-                renderTextInput={(textInputProps) => (
-                  <TextInput
-                    {...textInputProps}
-                    style={{ backgroundColor: "transparent" }}
-                  />
-                )}
-              />
-            )}
-          />
-          <Controller
-            name="dueDate"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { value }, fieldState: { error } }) => (
-              <TextInput
-                label="Vencimento"
-                error={!!error}
-                value={value}
-                onFocus={() => setOpenDatePicker(true)}
-                style={{ backgroundColor: "transparent" }}
-              />
-            )}
-          />
-
-          {openDatePicker && (
-            <RNDateTimePicker value={date} onChange={onChange} />
+    <SafeAreaCustomized>
+      <TitleWithButtons
+        title="Renda"
+        onAdd={handleAdd}
+        onDelete={() => setActivateDelete(!activateDelete)}
+        activateDelete={activateDelete}
+      />
+      <ModalDefault open={openModal} onDismiss={handleCancel}>
+        <Text style={Teste.title}>Add sua renda</Text>
+        <Controller
+          name="font"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={value}
+              label="Fonte"
+              error={!!error}
+              helperText={error && error.message}
+              style={{ backgroundColor: "transparent" }}
+            />
           )}
-          <Button type="submit" onPress={handleSubmit(onSubmit)}>
-            Submit
-          </Button>
-        </ModalDefault>
-        <Table
-          header={header}
-          rows={rows}
-          onEdit={handleEdit}
-          onCheck={onCheck}
-          activateDelete={activateDelete}
-          onDelete={handleDelete}
         />
-      </View>
-    </SafeAreaView>
+        <Controller
+          name="amount"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <CurrencyInput
+              value={value}
+              onChangeValue={onChange}
+              prefix="R$"
+              delimiter="."
+              separator=","
+              error={!!error}
+              label="Valor"
+              precision={2}
+              renderTextInput={(textInputProps) => (
+                <TextInput
+                  {...textInputProps}
+                  style={{ backgroundColor: "transparent" }}
+                />
+              )}
+            />
+          )}
+        />
+        <Controller
+          name="dueDate"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { value }, fieldState: { error } }) => (
+            <TextInput
+              label="Vencimento"
+              error={!!error}
+              value={value}
+              onFocus={() => setOpenDatePicker(true)}
+              style={{ backgroundColor: "transparent" }}
+            />
+          )}
+        />
+
+        {openDatePicker && (
+          <RNDateTimePicker value={date} onChange={onChange} />
+        )}
+        <Button type="submit" onPress={handleSubmit(onSubmit)}>
+          Submit
+        </Button>
+      </ModalDefault>
+      <Table
+        header={header}
+        rows={rows}
+        onEdit={handleEdit}
+        onCheck={onCheck}
+        activateDelete={activateDelete}
+        onDelete={handleDelete}
+      />
+    </SafeAreaCustomized>
   );
 };
 

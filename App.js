@@ -1,11 +1,11 @@
 import React from "react";
-import Nav from "./src/componets/Nav";
+import Nav from "./src/components/Nav";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
-import Home from "./src/pages/Home";
-import { StatusBar } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import store from "./src/store";
+import Colors from "./src/themes/colors";
 
 const storeConfig = store();
 
@@ -14,7 +14,7 @@ export default function App() {
     <ReduxProvider store={storeConfig}>
       <Provider>
         <NavigationContainer>
-          <StatusBar animated={true} backgroundColor="#61dafb" />
+          <StatusBar backgroundColor={Colors.green100} />
           <Nav />
         </NavigationContainer>
       </Provider>

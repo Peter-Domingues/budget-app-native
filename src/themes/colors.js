@@ -1,4 +1,5 @@
 const Colors = {
+  green50: "#e0efdd",
   green100: "#35794b",
   white: "#fff",
   red: "#d81f1f",
