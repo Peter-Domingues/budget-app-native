@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import { Button, IconButton } from "react-native-paper";
 import CalcButtonStyles from "./styles";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Colors from "../../../../themes/colors";
 
 const CalcButton = ({ children, onClick, isInput, copyResult }) => {
   const ehNum = (val) => {
@@ -24,11 +25,17 @@ const CalcButton = ({ children, onClick, isInput, copyResult }) => {
       {isInput ? (
         <View style={CalcButtonStyles.input}>
           <IconButton
-            icon={() => <MaterialIcons name="content-copy" size={26} />}
+            icon={() => (
+              <MaterialIcons
+                name="content-copy"
+                size={26}
+                color={Colors.white}
+              />
+            )}
             size={20}
             onPress={copyResult}
+            style={CalcButtonStyles.iconCopy}
           />
-
           <Text style={CalcButtonStyles.inputText}>{children}</Text>
         </View>
       ) : (
@@ -43,7 +50,9 @@ const CalcButton = ({ children, onClick, isInput, copyResult }) => {
           buttonColor={
             ehIgual(children) ? "#A6CE95" : !ehNum(children) ? "#35794b" : null
           }
-          style={CalcButtonStyles.button}
+          style={ehIgual(children) ? { width: "100%" } : { width: "25%" }}
+          labelStyle={CalcButtonStyles.buttonText}
+          contentStyle={CalcButtonStyles.button}
           onPress={() => onClick(children)}
         >
           {children}

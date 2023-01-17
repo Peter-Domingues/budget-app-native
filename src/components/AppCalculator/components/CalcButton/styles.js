@@ -1,35 +1,39 @@
 import { StyleSheet } from "react-native";
+import Colors from "../../../../themes/colors";
 
 const CalcButtonStyles = StyleSheet.create({
-  botaoWrapper: {
-    color: "#35794b",
-  },
-
   input: {
-    height: 48,
+    height: 60,
+    justifyContent: "space-between",
     display: "flex",
-    justifyContent: "flex-end",
     alignItems: "center",
     fontWeight: "bold",
     backgroundColor: "#234214",
     padding: 1,
     outline: "1px solid #bad9ad",
     borderRadius: 4,
-    marginBottom: 2,
+    width: "100%",
+    flexDirection: "row",
   },
   inputText: {
     letterSpacing: 1,
-    fontSize: 15,
+    fontSize: 20,
     color: "#fff",
     textAlign: "right",
-    marginLeft: 5,
+    marginRight: 15,
+    justifyContent: "flex-end",
   },
   button: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 1.4,
-    height: 56,
+    height: 70,
+  },
+  buttonText: {
+    fontSize: 20,
+  },
+  iconCopy: {
+    alignSelf: "flex-start",
   },
 });
 

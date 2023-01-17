@@ -23,6 +23,7 @@ const SafeAreaCustomized = ({ children }) => {
           backgroundColor: Colors.green50,
           marginLeft: 15,
           marginRight: 15,
+          flex: 1,
         }}
       >
         <StatusBar backgroundColor={Colors.green100} />
