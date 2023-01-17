@@ -8,21 +8,29 @@ import { IconButton } from "react-native-paper";
 const TitleWithButtons = (props) => {
   return (
     <View style={TitleWithButtonsStyles.container}>
-      <IconButton
-        icon={() => (
-          <MaterialIcons
-            name={props.activateDelete ? "close" : "delete-forever"}
-            color={Colors.red}
-            size={26}
-          />
-        )}
-        size={20}
-        onPress={props.onDelete}
-      />
+      {props.isEdit ? (
+        <View style={TitleWithButtonsStyles.emptyButton} />
+      ) : (
+        <IconButton
+          icon={() => (
+            <MaterialIcons
+              name={props.activateDelete ? "close" : "delete-forever"}
+              color={Colors.red}
+              size={26}
+            />
+          )}
+          size={20}
+          onPress={props.onDelete}
+        />
+      )}
       <Text style={TitleWithButtonsStyles.title}>{props.title}</Text>
       <IconButton
         icon={() => (
-          <MaterialIcons name="add" color={Colors.green100} size={26} />
+          <MaterialIcons
+            name={props.isEdit ? "edit" : "add"}
+            color={Colors.green100}
+            size={26}
+          />
         )}
         size={20}
         onPress={props.onAdd}

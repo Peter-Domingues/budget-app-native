@@ -15,6 +15,9 @@ const TitleWithButtonsStyles = StyleSheet.create({
     color: Colors.green100,
     fontSize: 20,
   },
+  emptyButton: {
+    width: "10%",
+  },
 });
 
 export default TitleWithButtonsStyles;

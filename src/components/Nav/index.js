@@ -10,13 +10,14 @@ import Incoming from "../../pages/Incoming";
 import Colors from "../../themes/colors";
 import Compute from "../../pages/Compute";
 import Spending from "../../pages/Spending";
+import Profit from "../../pages/Profit";
 
 const Tab = createBottomTabNavigator();
 
 const Nav = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Calculadora"
+      initialRouteName="Profit"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.green100,
@@ -26,10 +27,10 @@ const Nav = () => {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Wallet"
         component={Wallet}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "Carteira",
           tabBarIcon: ({ color }) => (
             <Ionicons name="wallet" color={color} size={26} />
           ),
@@ -56,8 +57,8 @@ const Nav = () => {
         }}
       />
       <Tab.Screen
-        name="Cofre"
-        component={Home}
+        name="Profit"
+        component={Profit}
         options={{
           tabBarLabel: "Cofre",
           tabBarIcon: ({ color }) => (
@@ -66,7 +67,7 @@ const Nav = () => {
         }}
       />
       <Tab.Screen
-        name="Historico"
+        name="History"
         component={Home}
         options={{
           tabBarLabel: "Historico",
