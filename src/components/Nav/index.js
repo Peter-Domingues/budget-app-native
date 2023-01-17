@@ -9,6 +9,7 @@ import Wallet from "../../pages/Wallet";
 import Incoming from "../../pages/Incoming";
 import Colors from "../../themes/colors";
 import Compute from "../../pages/Compute";
+import Spending from "../../pages/Spending";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ const Nav = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Home}
+        component={Spending}
         options={{
           tabBarLabel: "Gastos",
           tabBarIcon: ({ color }) => (
