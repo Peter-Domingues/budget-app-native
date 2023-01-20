@@ -19,6 +19,7 @@
     "@react-navigation/stack": "^6.3.11",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/react-native": "^0.71.0",
+    "axios": "^1.2.3",
     "expo": "^47.0.0",
     "expo-clipboard": "~4.0.1",
     "expo-status-bar": "~1.4.2",

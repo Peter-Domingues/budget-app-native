@@ -1,7 +1,7 @@
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import ModalDefault from "../../components/Modal";
@@ -10,13 +10,24 @@ import TitleWithButtons from "../../components/TitleWithButtons";
 import { useForm, Controller } from "react-hook-form";
 import CurrencyInput from "react-native-currency-input";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
-
+import { getIncoming, postIncoming } from "../../api/IncomingApi";
+interface Row {
+  id: string;
+  font: string;
+  amount: Number;
+  dueDate: string;
+  isChecked: boolean;
+}
 const Incoming = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [openModal, setOpenModal] = useState(false);
   const [edit, setEdit] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [activateDelete, setActivateDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const formatedDate = currentDate?.toLocaleDateString("pt-BR");
 
   const header = [
     { title: "", isNumeric: false },
@@ -25,42 +36,53 @@ const Incoming = () => {
     { title: "Data", isNumeric: false },
     { title: "", isNumeric: false },
   ];
-  const [rows, setRows] = useState([
-    { font: "Agua", amount: 200, dueDate: "01/16/23", isChecked: true },
-    { font: "Luz", amount: 450, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 120, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Teste", amount: 200, dueDate: "01/16/23", isChecked: false },
-  ]);
+  const [rows, setRows] = useState<Array<Row>>([]);
 
   const { control, handleSubmit, reset, setValue, trigger } = useForm({
     defaultValues: {
       font: "",
-      amount: "",
+      amount: 0,
       dueDate: "",
     },
   });
 
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("pt-BR");
+  };
+
+  const getRows = async () => {
+    setIsLoading(true);
+    await getIncoming(month)
+      .then((res) => {
+        let newRows: Array<Row> = [];
+        res.data.map((row: Row) =>
+          newRows.push({
+            id: row.id,
+            font: row.font,
+            amount: row.amount,
+            dueDate: formatDate(row.dueDate),
+            isChecked: row.isChecked,
+          })
+        );
+        setRows(newRows);
+        setIsLoading(false);
+      })
+      .finally(() => {})
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    getRows();
+  }, []);
+
   const onSubmit = async (data: any) => {
-    console.log(data);
-    // const payload = {
-    //   font: data.font,
-    //   value: parseInt(data.money),
-    //   date: data.dueDate,
-    //   isChecked: false,
-    //   recurrent: data.recurrent,
-    // };
+    console.log(data.dueDate);
+    const payload = {
+      font: data.font,
+      amount: parseInt(data.amount),
+      dueDate: currentDate,
+      isChecked: false,
+    };
     // edit
     //   ? await editRow(currentRowId, payload)
     //       .then(() => {
@@ -71,18 +93,14 @@ const Incoming = () => {
     //         setEdit(false);
     //         reset();
     //       })
-    //   : await postRow(payload)
-    //       .then(() => {
-    //         init();
-    //       })
-    //       .finally(() => {
-    //         setAddNewIncoming(false);
-    //         reset();
-    //       });
+    await postIncoming(payload)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => console.log(error));
   };
   const onChange = (event: DateTimePickerEvent, date?: Date) => {
-    const currentDate = date?.toLocaleDateString("pt-BR") || "";
-    setValue("dueDate", currentDate);
+    setValue("dueDate", formatedDate);
     setOpenDatePicker(false);
     setCurrentDate(date || new Date());
     trigger("dueDate");
@@ -118,7 +136,9 @@ const Incoming = () => {
     setRows(newRows);
   };
 
-  return (
+  return isLoading ? (
+    <></>
+  ) : (
     <SafeAreaCustomized>
       <TitleWithButtons
         title="Renda"
@@ -150,14 +170,15 @@ const Incoming = () => {
           control={control}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <CurrencyInput
-              value={parseInt(value)}
+              value={value}
               onChangeValue={onChange}
               prefix="R$"
               delimiter="."
               separator=","
               precision={2}
-              renderTextInput={() => (
+              renderTextInput={(props) => (
                 <TextInput
+                  {...props}
                   accessibilityLabelledBy={undefined}
                   accessibilityLanguage={undefined}
                   style={{ backgroundColor: "transparent" }}
