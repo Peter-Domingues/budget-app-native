@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 import Colors from "../../themes/colors";
 
 const TableStyles = StyleSheet.create({
+  maxHeightTable: { maxHeight: "85%" },
   maxScroll: {
-    maxHeight: "80%",
     width: "100%",
     backgroundColor: Colors.white,
   },

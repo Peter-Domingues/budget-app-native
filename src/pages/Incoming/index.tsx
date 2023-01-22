@@ -10,7 +10,7 @@ import TitleWithButtons from "../../components/TitleWithButtons";
 import { useForm, Controller } from "react-hook-form";
 import CurrencyInput from "react-native-currency-input";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
-import { getIncoming, postIncoming } from "../../api/IncomingApi";
+import { editIncoming, getIncoming, postIncoming } from "../../api/IncomingApi";
 interface Row {
   id: string;
   font: string;
@@ -24,11 +24,12 @@ const Incoming = () => {
   const [edit, setEdit] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [activateDelete, setActivateDelete] = useState(false);
+  const [currentRowId, setCurrentRowId] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [rows, setRows] = useState<Array<Row>>([]);
   const today = new Date();
   const month = today.getMonth() + 1;
   const formatedDate = currentDate?.toLocaleDateString("pt-BR");
-
   const header = [
     { title: "", isNumeric: false },
     { title: "Fonte", isNumeric: false },
@@ -36,8 +37,6 @@ const Incoming = () => {
     { title: "Data", isNumeric: false },
     { title: "", isNumeric: false },
   ];
-  const [rows, setRows] = useState<Array<Row>>([]);
-
   const { control, handleSubmit, reset, setValue, trigger } = useForm({
     defaultValues: {
       font: "",
@@ -55,9 +54,9 @@ const Incoming = () => {
     await getIncoming(month)
       .then((res) => {
         let newRows: Array<Row> = [];
-        res.data.map((row: Row) =>
+        res.data.map((row: any) =>
           newRows.push({
-            id: row.id,
+            id: row._id,
             font: row.font,
             amount: row.amount,
             dueDate: formatDate(row.dueDate),
@@ -76,29 +75,29 @@ const Incoming = () => {
   }, []);
 
   const onSubmit = async (data: any) => {
-    console.log(data.dueDate);
     const payload = {
       font: data.font,
       amount: parseInt(data.amount),
       dueDate: currentDate,
       isChecked: false,
     };
-    // edit
-    //   ? await editRow(currentRowId, payload)
-    //       .then(() => {
-    //         init();
-    //       })
-    //       .finally(() => {
-    //         setAddNewIncoming(false);
-    //         setEdit(false);
-    //         reset();
-    //       })
-    await postIncoming(payload)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => console.log(error));
+
+    edit
+      ? await editIncoming(currentRowId, payload)
+          .then(() => {
+            getRows();
+          })
+          .finally(() => {
+            setEdit(false);
+            reset();
+          })
+      : await postIncoming(payload)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => console.log(error));
   };
+
   const onChange = (event: DateTimePickerEvent, date?: Date) => {
     setValue("dueDate", formatedDate);
     setOpenDatePicker(false);
@@ -107,9 +106,9 @@ const Incoming = () => {
   };
 
   const handleEdit = async (row: any) => {
-    console.log(row);
+    setCurrentRowId(row.id);
     setValue("font", row.font);
-    setValue("amount", row.amount.toString());
+    setValue("amount", row.amount?.toString());
     setValue("dueDate", row.dueDate);
     setEdit(true);
     setOpenModal(true);
@@ -177,6 +176,7 @@ const Incoming = () => {
               separator=","
               precision={2}
               renderTextInput={(props) => (
+                // @ts-ignore
                 <TextInput
                   {...props}
                   accessibilityLabelledBy={undefined}

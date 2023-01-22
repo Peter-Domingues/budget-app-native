@@ -7,7 +7,7 @@ import Colors from "../../themes/colors";
 
 const Table = (props) => {
   return (
-    <DataTable>
+    <DataTable style={TableStyles.maxHeightTable}>
       <DataTable.Header style={TableStyles.header}>
         {props.header.map((headerItem, index) => (
           <DataTable.Title key={index} textStyle={TableStyles.headerText}>

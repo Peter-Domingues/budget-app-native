@@ -9,6 +9,7 @@ const TitleWithButtonsStyles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     textAlign: "center",

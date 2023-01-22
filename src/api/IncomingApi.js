@@ -23,4 +23,13 @@ async function postIncoming(payload) {
   return data;
 }
 
-export { getIncomingByID, getIncoming, postIncoming };
+async function editIncoming(id, payload) {
+  const { data } = await axios({
+    method: "put",
+    url: `http://192.168.1.35:3000/api/incoming/${id}`,
+    data: payload,
+  });
+  return data;
+}
+
+export { getIncomingByID, getIncoming, postIncoming, editIncoming };

@@ -88,7 +88,6 @@ const Spending = () => {
   };
 
   const handleEdit = async (row) => {
-    console.log(row);
     setValue("font", row.font);
     setValue("amount", row.amount.toString());
     setValue("dueDate", row.dueDate);
