@@ -4,13 +4,13 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Home from "../../pages/Home";
 import Wallet from "../../pages/Wallet";
 import Incoming from "../../pages/Incoming";
 import Colors from "../../themes/colors";
 import Compute from "../../pages/Compute";
 import Spending from "../../pages/Spending";
 import Profit from "../../pages/Profit";
+import History from "../../pages/History";
 
 const Tab = createBottomTabNavigator();
 
@@ -68,7 +68,7 @@ const Nav = () => {
       />
       <Tab.Screen
         name="History"
-        component={Home}
+        component={History}
         options={{
           tabBarLabel: "Historico",
           tabBarIcon: ({ color }) => (

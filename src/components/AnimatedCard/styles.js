@@ -50,7 +50,6 @@ const AnimatedCardStyles = StyleSheet.create({
     backgroundColor: Colors.green100,
     borderTopRightRadius: 10,
     borderBottomLeftRadius: 10,
-    marginTop: 20,
     overflow: "hidden",
     width: "100%",
   },

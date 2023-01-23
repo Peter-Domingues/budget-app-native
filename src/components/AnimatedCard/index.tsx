@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
-  StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
-import Colors from "../../themes/colors";
 import { useNavigation } from "@react-navigation/native";
 import Animated, {
   SlideInRight,
@@ -19,9 +17,10 @@ import AnimatedCardStyles from "./styles";
 interface AnimatedCardProps {
   cardTitle: string;
   cardValue: string;
-  goTo: never;
-  isNegative: boolean;
-  isMoney: boolean;
+  goTo: string;
+  isNegative?: boolean;
+  isMoney?: boolean;
+  marginTop?: number;
 }
 
 interface AnimatedBlockProps {
@@ -38,6 +37,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
   goTo,
   isNegative,
   isMoney,
+  marginTop,
 }) => {
   const navigation = useNavigation();
   const [show, setShow] = useState(false);
@@ -49,7 +49,12 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
     animatedStyle,
   }) => {
     return (
-      <View style={AnimatedCardStyles.animatedBox}>
+      <View
+        style={[
+          AnimatedCardStyles.animatedBox,
+          marginTop ? { marginTop: marginTop } : { marginTop: 20 },
+        ]}
+      >
         {show ? (
           <>
             <Animated.View
@@ -108,7 +113,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
 
   useEffect(() => {
     if (finishedEffect) {
-      navigation.navigate(goTo);
+      navigation.navigate(goTo as never);
       setFinishedEffect(false);
       setShow(false);
     }
