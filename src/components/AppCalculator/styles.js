@@ -10,6 +10,8 @@ const AppCalculatorSyles = StyleSheet.create({
     width: "100%",
     paddingTop: 10,
   },
+  input: { width: "73%" },
+  eraseButton: { width: "27%", paddingLeft: 10 },
 });
 
 export default AppCalculatorSyles;

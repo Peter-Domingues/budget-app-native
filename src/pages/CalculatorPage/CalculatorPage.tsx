@@ -2,15 +2,18 @@ import React from "react";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import AppCalculator from "../../components/AppCalculator";
 import { View } from "react-native";
+import CalculatorPageStyles from "./styles";
+import { Text } from "react-native-paper";
 
-const Compute = () => {
+const CalculatorPage = () => {
   return (
     <SafeAreaCustomized>
-      <View style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+      <Text style={CalculatorPageStyles.title}>Calculadora</Text>
+      <View style={CalculatorPageStyles.container}>
         <AppCalculator />
       </View>
     </SafeAreaCustomized>
   );
 };
 
-export default Compute;
+export default CalculatorPage;

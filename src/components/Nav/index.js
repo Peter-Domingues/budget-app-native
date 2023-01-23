@@ -7,10 +7,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Wallet from "../../pages/Wallet";
 import Incoming from "../../pages/Incoming";
 import Colors from "../../themes/colors";
-import Compute from "../../pages/Compute";
 import Spending from "../../pages/Spending";
 import Profit from "../../pages/Profit";
 import History from "../../pages/History";
+import CalculatorPage from "../../pages/CalculatorPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -78,7 +78,7 @@ const Nav = () => {
       />
       <Tab.Screen
         name="Calculadora"
-        component={Compute}
+        component={CalculatorPage}
         options={{
           tabBarLabel: "Calculadora",
           tabBarIcon: ({ color }) => (

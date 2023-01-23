@@ -4,36 +4,42 @@ import CalcButton from "./components/CalcButton";
 import * as math from "mathjs";
 import AppCalculatorSyles from "./styles";
 import * as Clipboard from "expo-clipboard";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Colors from "../../themes/colors";
 
-const Calculator = () => {
+const AppCalculator = () => {
   const arrOperacoes = ["*", "/", "+", ".", "-"];
 
   const [input, setInput] = useState("");
 
-  function insereNum(val) {
+  const insereNum = (val: string | number) => {
     setInput(input + val);
-  }
+  };
+  const eraseNum = () => {
+    const newInput = input.substring(0, input.length - 1);
+    setInput(newInput);
+  };
 
-  function insereOperacao(val) {
+  const insereOperacao = (val: string | number) => {
     if (
       input === "" ||
       (arrOperacoes.includes(input[input.length - 1]) &&
-        arrOperacoes.includes(val))
+        arrOperacoes.includes(val as string))
     ) {
       return;
     } else {
       setInput(input + val);
     }
-  }
+  };
 
-  function calcular() {
+  const calcular = () => {
     if (input === "" || arrOperacoes.includes(input[input.length - 1])) {
       return input;
     } else {
       const result = math.evaluate(input);
       setInput(result.toString());
     }
-  }
+  };
 
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(input);
@@ -41,9 +47,19 @@ const Calculator = () => {
 
   return (
     <View style={AppCalculatorSyles.calcWrapper}>
-      <CalcButton isInput copyResult={copyToClipboard}>
-        {input}
-      </CalcButton>
+      <View style={AppCalculatorSyles.line}>
+        <View style={AppCalculatorSyles.input}>
+          <CalcButton isInput copyResult={copyToClipboard}>
+            {input}
+          </CalcButton>
+        </View>
+
+        <View style={AppCalculatorSyles.eraseButton}>
+          <CalcButton onClick={eraseNum} isRemoveOne>
+            <MaterialIcons name="arrow-back" color={Colors.white} size={26} />
+          </CalcButton>
+        </View>
+      </View>
       <View style={AppCalculatorSyles.line}>
         <CalcButton onClick={insereNum}>7</CalcButton>
         <CalcButton onClick={insereNum}>8</CalcButton>
@@ -75,4 +91,4 @@ const Calculator = () => {
   );
 };
 
-export default Calculator;
+export default AppCalculator;

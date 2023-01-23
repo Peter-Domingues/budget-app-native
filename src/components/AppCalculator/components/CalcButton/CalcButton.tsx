@@ -4,16 +4,29 @@ import { Button, IconButton } from "react-native-paper";
 import CalcButtonStyles from "./styles";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../../../themes/colors";
+interface CalcButtonProps {
+  children: any;
+  onClick?: any;
+  isInput?: boolean;
+  copyResult?: any;
+  isRemoveOne?: boolean;
+}
 
-const CalcButton = ({ children, onClick, isInput, copyResult }) => {
-  const ehNum = (val) => {
-    if (!isNaN(val) || val === "C" || val === ".") {
+const CalcButton: React.FC<CalcButtonProps> = ({
+  children,
+  onClick,
+  isInput,
+  copyResult,
+  isRemoveOne,
+}) => {
+  const ehNum = (val: string | number) => {
+    if (!isNaN(val as number) || val === "C" || val === ".") {
       return true;
     }
     return false;
   };
 
-  const ehIgual = (val) => {
+  const ehIgual = (val: string | number) => {
     if (val === "=") {
       return true;
     }
@@ -35,6 +48,8 @@ const CalcButton = ({ children, onClick, isInput, copyResult }) => {
             size={20}
             onPress={copyResult}
             style={CalcButtonStyles.iconCopy}
+            accessibilityLabelledBy={undefined}
+            accessibilityLanguage={undefined}
           />
           <Text style={CalcButtonStyles.inputText}>{children}</Text>
         </View>
@@ -48,9 +63,17 @@ const CalcButton = ({ children, onClick, isInput, copyResult }) => {
               : "#35794b"
           }
           buttonColor={
-            ehIgual(children) ? "#A6CE95" : !ehNum(children) ? "#35794b" : null
+            ehIgual(children) || isRemoveOne
+              ? "#A6CE95"
+              : !ehNum(children)
+              ? "#35794b"
+              : undefined
           }
-          style={ehIgual(children) ? { width: "100%" } : { width: "25%" }}
+          style={
+            ehIgual(children) || isRemoveOne
+              ? { width: "100%" }
+              : { width: "25%" }
+          }
           labelStyle={CalcButtonStyles.buttonText}
           contentStyle={CalcButtonStyles.button}
           onPress={() => onClick(children)}

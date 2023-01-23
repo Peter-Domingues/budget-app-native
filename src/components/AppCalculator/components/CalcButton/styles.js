@@ -3,7 +3,7 @@ import Colors from "../../../../themes/colors";
 
 const CalcButtonStyles = StyleSheet.create({
   input: {
-    height: 60,
+    height: 70,
     justifyContent: "space-between",
     display: "flex",
     alignItems: "center",
