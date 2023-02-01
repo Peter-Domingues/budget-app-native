@@ -136,7 +136,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 ) : (
                   <Checkbox
                     status={row.isChecked ? "checked" : "unchecked"}
-                    onPress={() => onCheck(index)}
+                    onPress={() => onCheck(row)}
                   />
                 )}
                 <Text

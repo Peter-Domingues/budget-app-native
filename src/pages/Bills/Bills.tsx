@@ -12,12 +12,20 @@ import RNDateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { editBill, getBill, postBill } from "../../api/BillsApi";
 import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
+import LoadingComponent from "../../components/LoadingComponent";
 
 interface rowItems {
   id: string;
   font: String;
   amount: number;
   dueDate: String;
+  isChecked: boolean;
+}
+interface responseRows {
+  id: string;
+  font: String;
+  amount: number;
+  dueDate: string | number | Date;
   isChecked: boolean;
 }
 
@@ -31,9 +39,10 @@ const Bills = () => {
   const [snackbarText, setSnackbarText] = useState<String>("");
   const [activateDelete, setActivateDelete] = useState<boolean>(false);
   const [currentRowId, setCurrentRowId] = useState();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [rows, setRows] = useState<rowItems[]>([]);
   const [total, setTotal] = useState<number>(0);
+  const [overdueBills, setOverdueBills] = useState<number>(0);
   const today = new Date();
   const month = today.getMonth() + 1;
 
@@ -56,6 +65,18 @@ const Bills = () => {
     return new Date(date).toLocaleDateString("pt-BR");
   };
 
+  const handleOverdue = (bills: Array<responseRows>) => {
+    const todaysDate = new Date().getTime();
+
+    let overdueCount = 0;
+
+    bills.map((bill) => {
+      const billDate = new Date(bill.dueDate).getTime();
+      if (!bill.isChecked && billDate < todaysDate) overdueCount++;
+    });
+    setOverdueBills(overdueCount);
+  };
+
   const getRows = async () => {
     setIsLoading(true);
     await getBill(month)
@@ -74,6 +95,7 @@ const Bills = () => {
         setRows(newRows);
         setIsLoading(false);
         setTotal(res.data.Total);
+        handleOverdue(res.data.result);
       })
       .finally(() => {})
       .catch((error) => console.log(error));
@@ -104,7 +126,7 @@ const Bills = () => {
             reset();
           })
       : await postBill(payload)
-          .then((res) => {
+          .then(() => {
             getRows();
             setShowSnackbar(true);
             setSnackbarText("Conta criada com sucesso");
@@ -147,10 +169,14 @@ const Bills = () => {
     setOpenModal(false);
   };
 
-  const onCheck = async (index: number) => {
-    const newRows = [...rows];
-    newRows[index].isChecked = !newRows[index].isChecked;
-    setRows(newRows);
+  const onCheck = async (row: rowItems) => {
+    const payload = {
+      ...row,
+      isChecked: !row.isChecked,
+    };
+    await editBill(row.id, payload).then(() => {
+      getRows();
+    });
   };
 
   const handleDelete = async (index: number) => {
@@ -161,92 +187,94 @@ const Bills = () => {
 
   return (
     <SafeAreaCustomized>
-      <TitleWithButtons
-        title="Gastos"
-        onAdd={handleAdd}
-        onDelete={() => setActivateDelete(!activateDelete)}
-        activateDelete={activateDelete}
-      />
-      <ModalDefault open={openModal} onDismiss={handleCancel}>
-        <Text>Add sua renda</Text>
-        <Controller
-          name="font"
-          rules={{ required: true }}
-          control={control}
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <TextInput
-              onChangeText={onChange}
-              value={value}
-              label="Fonte"
-              error={!!error}
-              style={{ backgroundColor: "transparent" }}
-              accessibilityLabelledBy={undefined}
-              accessibilityLanguage={undefined}
-            />
-          )}
+      <LoadingComponent isLoading={isLoading}>
+        <TitleWithButtons
+          title="Gastos"
+          onAdd={handleAdd}
+          onDelete={() => setActivateDelete(!activateDelete)}
+          activateDelete={activateDelete}
         />
-        <Controller
-          name="amount"
-          rules={{ required: true }}
-          control={control}
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <CurrencyInput
-              value={value}
-              onChangeValue={onChange}
-              prefix="R$"
-              delimiter="."
-              separator=","
-              precision={2}
-              renderTextInput={(textInputProps) => (
-                // @ts-ignore
-                <TextInput
-                  accessibilityLabelledBy={undefined}
-                  accessibilityLanguage={undefined}
-                  {...textInputProps}
-                  style={{ backgroundColor: "transparent" }}
-                  error={!!error}
-                  label="Valor"
-                />
-              )}
-            />
-          )}
-        />
-        <Controller
-          name="dueDate"
-          rules={{ required: true }}
-          control={control}
-          render={({ field: { value }, fieldState: { error } }) => (
-            <TextInput
-              label="Vencimento"
-              error={!!error}
-              value={value}
-              onFocus={() => setOpenDatePicker(true)}
-              style={{ backgroundColor: "transparent" }}
-              accessibilityLabelledBy={undefined}
-              accessibilityLanguage={undefined}
-            />
-          )}
-        />
+        <ModalDefault open={openModal} onDismiss={handleCancel}>
+          <Text>Add sua renda</Text>
+          <Controller
+            name="font"
+            rules={{ required: true }}
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextInput
+                onChangeText={onChange}
+                value={value}
+                label="Fonte"
+                error={!!error}
+                style={{ backgroundColor: "transparent" }}
+                accessibilityLabelledBy={undefined}
+                accessibilityLanguage={undefined}
+              />
+            )}
+          />
+          <Controller
+            name="amount"
+            rules={{ required: true }}
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <CurrencyInput
+                value={value}
+                onChangeValue={onChange}
+                prefix="R$"
+                delimiter="."
+                separator=","
+                precision={2}
+                renderTextInput={(textInputProps) => (
+                  // @ts-ignore
+                  <TextInput
+                    accessibilityLabelledBy={undefined}
+                    accessibilityLanguage={undefined}
+                    {...textInputProps}
+                    style={{ backgroundColor: "transparent" }}
+                    error={!!error}
+                    label="Valor"
+                  />
+                )}
+              />
+            )}
+          />
+          <Controller
+            name="dueDate"
+            rules={{ required: true }}
+            control={control}
+            render={({ field: { value }, fieldState: { error } }) => (
+              <TextInput
+                label="Vencimento"
+                error={!!error}
+                value={value}
+                onFocus={() => setOpenDatePicker(true)}
+                style={{ backgroundColor: "transparent" }}
+                accessibilityLabelledBy={undefined}
+                accessibilityLanguage={undefined}
+              />
+            )}
+          />
 
-        {openDatePicker && (
-          // @ts-ignore
-          <RNDateTimePicker value={currentDate} onChange={onChange} />
-        )}
-        <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
-      </ModalDefault>
-      <CustomTable
-        headerItems={header}
-        rows={rows}
-        onEdit={handleEdit}
-        onCheck={onCheck}
-        activateDelete={activateDelete}
-        onDelete={handleDelete}
-        isTotalRed
-        bottomRightLabel="Vencidas"
-        isBottomRightRed
-        total={total}
-        quantity={rows.length}
-      />
+          {openDatePicker && (
+            // @ts-ignore
+            <RNDateTimePicker value={currentDate} onChange={onChange} />
+          )}
+          <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+        </ModalDefault>
+        <CustomTable
+          headerItems={header}
+          rows={rows}
+          onEdit={handleEdit}
+          onCheck={onCheck}
+          activateDelete={activateDelete}
+          onDelete={handleDelete}
+          isTotalRed
+          bottomRightLabel="Vencidas"
+          isBottomRightRed={overdueBills > 0}
+          total={total}
+          quantity={overdueBills}
+        />
+      </LoadingComponent>
       <SnackbarCustom
         showSnackbar={showSnackbar}
         onDismissSnackBar={onDismissSnackBar}

@@ -6,8 +6,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../themes/colors";
 
 interface item {
-  title: string;
-  value: string;
+  title: string | undefined;
+  value: number;
   goTo: string;
   isMoney: boolean;
   isNegative: boolean;
@@ -62,8 +62,8 @@ const AccordionCard: React.FC<AccordionCardProps> = ({
         <View>
           {items.map((item: item) => (
             <AnimatedCard
-              cardTitle={item.title}
-              cardValue={item.value}
+              cardTitle={item.title || ""}
+              cardValue={item.value.toString()}
               goTo={item.goTo}
               marginTop={5}
               isMoney={item.isMoney}
