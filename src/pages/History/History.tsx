@@ -4,6 +4,7 @@ import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import HistoryStyles from "./styles";
 import AccordionCard from "../../components/AccordionCard";
 import { getHistory } from "../../api/HistoryApi";
+import LoadingComponent from "../../components/LoadingComponent";
 interface id {
   year: number;
 }
@@ -30,6 +31,7 @@ interface History {
 
 const History = () => {
   const [history, setHistory] = useState<History[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const convertMonth = (month: number) => {
     switch (month) {
       case 1:
@@ -62,8 +64,10 @@ const History = () => {
   };
 
   const init = async () => {
+    setIsLoading(true);
     await getHistory().then((res) => {
       setHistory(res.data);
+      setIsLoading(false);
     });
   };
 
@@ -73,33 +77,36 @@ const History = () => {
 
   return (
     <SafeAreaCustomized>
-      <View style={HistoryStyles.container}>
-        <Text style={HistoryStyles.title}>Histórico</Text>
-        {history?.map((item) => {
-          let test: item[] = [];
+      <LoadingComponent isLoading={isLoading}>
+        <View style={HistoryStyles.container}>
+          <Text style={HistoryStyles.title}>Histórico</Text>
+          {history?.map((item, index) => {
+            let test: item[] = [];
 
-          item.Months.map((month) => {
-            const amount = month.MonthIncoming - month.MonthSpendings;
-            const newItem: item = {
-              title: convertMonth(month.Month),
-              value: amount,
-              goTo: "Renda",
-              isMoney: true,
-              isNegative: amount < 0,
-            };
+            item.Months.map((month) => {
+              const amount = month.MonthIncoming - month.MonthSpendings;
+              const newItem: item = {
+                title: convertMonth(month.Month),
+                value: amount,
+                goTo: "Renda",
+                isMoney: true,
+                isNegative: amount < 0,
+              };
 
-            test.push(newItem);
-          });
+              test.push(newItem);
+            });
 
-          return (
-            <AccordionCard
-              title={item._id.year.toString()}
-              subtitle={item.YearProfit.toString()}
-              items={test}
-            />
-          );
-        })}
-      </View>
+            return (
+              <AccordionCard
+                key={index}
+                title={item._id.year.toString()}
+                subtitle={item.YearProfit.toString()}
+                items={test}
+              />
+            );
+          })}
+        </View>
+      </LoadingComponent>
     </SafeAreaCustomized>
   );
 };
