@@ -5,17 +5,17 @@ import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import ModalDefault from "../../components/Modal";
-import Table from "../../components/Table";
 import TitleWithButtons from "../../components/TitleWithButtons";
 import { useForm, Controller } from "react-hook-form";
 import CurrencyInput from "react-native-currency-input";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import { editIncoming, getIncoming, postIncoming } from "../../api/IncomingApi";
-interface Row {
+import CustomTable from "../../components/CustomTable";
+interface rowItems {
   id: string;
-  font: string;
-  amount: Number;
-  dueDate: string;
+  font: String;
+  amount: number;
+  dueDate: String;
   isChecked: boolean;
 }
 const Incoming = () => {
@@ -26,16 +26,16 @@ const Incoming = () => {
   const [activateDelete, setActivateDelete] = useState(false);
   const [currentRowId, setCurrentRowId] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [rows, setRows] = useState<Array<Row>>([]);
+  const [rows, setRows] = useState<Array<rowItems>>([]);
+  const [total, setTotal] = useState<number>(0);
   const today = new Date();
   const month = today.getMonth() + 1;
   const formatedDate = currentDate?.toLocaleDateString("pt-BR");
   const header = [
-    { title: "", isNumeric: false },
-    { title: "Fonte", isNumeric: false },
-    { title: "Valor", isNumeric: true },
-    { title: "Data", isNumeric: false },
-    { title: "", isNumeric: false },
+    { title: "Fonte", isNumeric: false, width: 100 },
+    { title: "Valor", isNumeric: true, width: 70 },
+    { title: "Data", isNumeric: false, width: 70 },
+    { title: "", isNumeric: false, width: 20 },
   ];
   const { control, handleSubmit, reset, setValue, trigger } = useForm({
     defaultValues: {
@@ -53,8 +53,9 @@ const Incoming = () => {
     setIsLoading(true);
     await getIncoming(month)
       .then((res) => {
-        let newRows: Array<Row> = [];
-        res.data.map((row: any) =>
+        console.log(res);
+        let newRows: Array<rowItems> = [];
+        res.data.result.map((row: any) =>
           newRows.push({
             id: row._id,
             font: row.font,
@@ -65,6 +66,7 @@ const Incoming = () => {
         );
         setRows(newRows);
         setIsLoading(false);
+        setTotal(res.data.Total);
       })
       .finally(() => {})
       .catch((error) => console.log(error));
@@ -80,6 +82,7 @@ const Incoming = () => {
       amount: parseInt(data.amount),
       dueDate: currentDate,
       isChecked: false,
+      type: "incoming",
     };
 
     edit
@@ -90,10 +93,15 @@ const Incoming = () => {
           .finally(() => {
             setEdit(false);
             reset();
+            setOpenModal(false);
           })
       : await postIncoming(payload)
           .then((res) => {
-            console.log(res);
+            getRows();
+          })
+          .finally(() => {
+            reset();
+            setOpenModal(false);
           })
           .catch((error) => console.log(error));
   };
@@ -211,13 +219,16 @@ const Incoming = () => {
         )}
         <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
       </ModalDefault>
-      <Table
-        header={header}
+      <CustomTable
+        headerItems={header}
         rows={rows}
+        total={total}
         onEdit={handleEdit}
         onCheck={onCheck}
         activateDelete={activateDelete}
         onDelete={handleDelete}
+        quantity={rows.length}
+        hideBottomLeft={true}
       />
     </SafeAreaCustomized>
   );

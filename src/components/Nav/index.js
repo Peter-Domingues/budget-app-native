@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 const Nav = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Wallet"
+      initialRouteName="Spending"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.green100,

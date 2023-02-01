@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import ModalDefault from "../../components/Modal";
-import Table from "../../components/Table";
+import CustomTable from "../../components/CustomTable/CustomTable.tsx";
 import TitleWithButtons from "../../components/TitleWithButtons";
 import SpendingStyles from "./styles";
 import { useForm, Controller } from "react-hook-form";
@@ -18,29 +18,108 @@ const Spending = () => {
   const [activateDelete, setActivateDelete] = useState(false);
 
   const header = [
-    { title: "", isNumeric: false },
-    { title: "Fonte", isNumeric: false },
-    { title: "Valor", isNumeric: true },
-    { title: "Data", isNumeric: false },
-    { title: "", isNumeric: false },
+    { title: "Fonte", isNumeric: false, width: 100 },
+    { title: "Valor", isNumeric: true, width: 70 },
+    { title: "Data", isNumeric: false, width: 70 },
+    { title: "", isNumeric: false, width: 20 },
   ];
   const [rows, setRows] = useState([
-    { font: "Agua", amount: 200, dueDate: "01/16/23", isChecked: true },
-    { font: "Luz", amount: 450, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 120, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Fonte", amount: 200, dueDate: "01/16/23", isChecked: false },
-    { font: "Teste", amount: 200, dueDate: "01/16/23", isChecked: false },
+    {
+      font: "Agua",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: true,
+    },
+    {
+      font: "Luz",
+      amount: 40050,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Água casa Fundos",
+      amount: 120,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Fonte",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
+    {
+      font: "Teste",
+      amount: 200,
+      dueDate: "01/16/23",
+      isChecked: false,
+    },
   ]);
 
   const { control, handleSubmit, reset, setValue, trigger } = useForm({
@@ -52,32 +131,28 @@ const Spending = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    // const payload = {
-    //   font: data.font,
-    //   value: parseInt(data.money),
-    //   date: data.dueDate,
-    //   isChecked: false,
-    //   recurrent: data.recurrent,
-    // };
-    // edit
-    //   ? await editRow(currentRowId, payload)
-    //       .then(() => {
-    //         init();
-    //       })
-    //       .finally(() => {
-    //         setAddNewIncoming(false);
-    //         setEdit(false);
-    //         reset();
-    //       })
-    //   : await postRow(payload)
-    //       .then(() => {
-    //         init();
-    //       })
-    //       .finally(() => {
-    //         setAddNewIncoming(false);
-    //         reset();
-    //       });
+    const payload = {
+      font: data.font,
+      amount: parseInt(data.amount),
+      dueDate: currentDate,
+      isChecked: false,
+      type: "bill",
+    };
+
+    edit
+      ? await editIncoming(currentRowId, payload)
+          .then(() => {
+            getRows();
+          })
+          .finally(() => {
+            setEdit(false);
+            reset();
+          })
+      : await postIncoming(payload)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => console.log(error));
   };
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate.toLocaleDateString("pt-BR");
@@ -186,13 +261,17 @@ const Spending = () => {
           Submit
         </Button>
       </ModalDefault>
-      <Table
-        header={header}
+      <CustomTable
+        headerItems={header}
         rows={rows}
         onEdit={handleEdit}
         onCheck={onCheck}
         activateDelete={activateDelete}
         onDelete={handleDelete}
+        isTotalRed
+        bottomRightLabel="Vencidas"
+        isBottomRightRed
+        total="200"
       />
     </SafeAreaCustomized>
   );

@@ -2,7 +2,6 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import AnimatedCard from "../../components/AnimatedCard";
 import AccordionCardStyles from "./styles";
-import { List } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../themes/colors";
 
@@ -25,7 +24,7 @@ const AccordionCard: React.FC<AccordionCardProps> = ({
   items,
   subtitle,
 }) => {
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState(false);
 
   const handlePress = () => setExpanded(!expanded);
 
