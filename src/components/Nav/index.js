@@ -20,10 +20,11 @@ const Nav = () => {
       initialRouteName="Bills"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: Colors.green100,
-        tabBarInactiveTintColor: "#666666",
-        tabBarItemStyle: { marginBottom: 8, marginTop: 8 },
-        tabBarStyle: { height: 60 },
+        tabBarActiveTintColor: Colors.white,
+        tabBarActiveBackgroundColor: Colors.green25,
+        tabBarInactiveTintColor: Colors.white,
+        tabBarItemStyle: { paddingBottom: 8, paddingTop: 8 },
+        tabBarStyle: { height: 60, backgroundColor: Colors.green100 },
       }}
     >
       <Tab.Screen
