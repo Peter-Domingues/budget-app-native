@@ -6,11 +6,11 @@ async function getIncomingHistory() {
     url: `http://192.168.1.5:3000/api/incoming/history`,
   });
 }
-async function getSpendingHistory() {
+async function getBillsHistory() {
   return axios({
     method: "get",
     url: `http://192.168.1.5:3000/api/spending/history`,
   });
 }
 
-export { getIncomingHistory, getSpendingHistory };
+export { getIncomingHistory, getBillsHistory };

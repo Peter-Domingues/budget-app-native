@@ -19,16 +19,16 @@ const Wallet = () => {
           cardTitle="Gastos"
           isNegative
           cardValue="14000"
-          goTo="Spending"
+          goTo="Bills"
           isMoney
         />
         <AnimatedCard
           cardTitle="Contas"
           isNegative
           cardValue="2"
-          goTo="Spending"
+          goTo="Bills"
         />
-        <AnimatedCard cardTitle="Contas Pagas" cardValue="1" goTo="Spending" />
+        <AnimatedCard cardTitle="Contas Pagas" cardValue="1" goTo="Bills" />
         <AnimatedCard
           cardTitle="Sobras"
           isMoney

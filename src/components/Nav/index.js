@@ -7,7 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Wallet from "../../pages/Wallet";
 import Incoming from "../../pages/Incoming";
 import Colors from "../../themes/colors";
-import Spending from "../../pages/Spending";
+import Bills from "../../pages/Bills/Bills";
 import Profit from "../../pages/Profit";
 import History from "../../pages/History";
 import CalculatorPage from "../../pages/CalculatorPage";
@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 const Nav = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Spending"
+      initialRouteName="Bills"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.green100,
@@ -47,8 +47,8 @@ const Nav = () => {
         }}
       />
       <Tab.Screen
-        name="Spending"
-        component={Spending}
+        name="Bills"
+        component={Bills}
         options={{
           tabBarLabel: "Gastos",
           tabBarIcon: ({ color }) => (

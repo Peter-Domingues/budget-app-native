@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import HistoryStyles from "./styles";
 import AccordionCard from "../../components/AccordionCard";
-import { getIncomingHistory, getSpendingHistory } from "../../api/HistoryApi";
+import { getIncomingHistory, getBillsHistory } from "../../api/HistoryApi";
 interface id {
   year: number;
   month: number;
@@ -23,7 +23,7 @@ interface item {
 interface History {
   _id: id;
   TotalIncoming: number;
-  TotalSpendings: number;
+  TotalBillss: number;
   Months: Months[];
 }
 

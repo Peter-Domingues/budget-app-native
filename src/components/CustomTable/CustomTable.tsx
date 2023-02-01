@@ -27,7 +27,7 @@ interface CustomTableProps {
   onDelete: any;
   isTotalRed?: boolean;
   total: number;
-  bottomRightLabel?: boolean;
+  bottomRightLabel?: String;
   isBottomRightRed?: boolean;
   quantity: number;
   hideBottomLeft?: boolean;
