@@ -12,7 +12,9 @@ import RNDateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { editBill, getBill, postBill } from "../../api/BillsApi";
 import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
-import LoadingComponent from "../../components/LoadingComponent";
+import { month } from "../../helpers/DateHelper";
+import { useDispatch, useSelector } from "react-redux";
+import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
 
 interface rowItems {
   id: string;
@@ -30,6 +32,7 @@ interface responseRows {
 }
 
 const Bills = () => {
+  const dispatch = useDispatch();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
@@ -43,8 +46,10 @@ const Bills = () => {
   const [rows, setRows] = useState<rowItems[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [overdueBills, setOverdueBills] = useState<number>(0);
-  const today = new Date();
-  const month = today.getMonth() + 1;
+  const currentMonth = month();
+  const safeAreaCustomizedReducers = useSelector(
+    (state) => state.safeAreaCustomizedReducers
+  );
 
   const header = [
     { title: "Fonte", isNumeric: false, width: 100 },
@@ -79,7 +84,7 @@ const Bills = () => {
 
   const getRows = async () => {
     setIsLoading(true);
-    await getBill(month)
+    await getBill(currentMonth)
       .then((res) => {
         console.log(res);
         let newRows: Array<rowItems> = [];
@@ -97,13 +102,19 @@ const Bills = () => {
         setTotal(res.data.Total);
         handleOverdue(res.data.result);
       })
-      .finally(() => {})
+      .finally(() => {
+        dispatch(SafeAreaCustomizedSlice.actions.IS_REFRESHING(false));
+      })
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
     getRows();
   }, []);
+
+  useEffect(() => {
+    getRows();
+  }, [safeAreaCustomizedReducers.refreshing]);
 
   const onDismissSnackBar = () => setShowSnackbar(false);
 
@@ -186,95 +197,93 @@ const Bills = () => {
   };
 
   return (
-    <SafeAreaCustomized>
-      <LoadingComponent isLoading={isLoading}>
-        <TitleWithButtons
-          title="Gastos"
-          onAdd={handleAdd}
-          onDelete={() => setActivateDelete(!activateDelete)}
-          activateDelete={activateDelete}
-        />
-        <ModalDefault open={openModal} onDismiss={handleCancel}>
-          <Text>Add sua renda</Text>
-          <Controller
-            name="font"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextInput
-                onChangeText={onChange}
-                value={value}
-                label="Fonte"
-                error={!!error}
-                style={{ backgroundColor: "transparent" }}
-                accessibilityLabelledBy={undefined}
-                accessibilityLanguage={undefined}
-              />
-            )}
-          />
-          <Controller
-            name="amount"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <CurrencyInput
-                value={value}
-                onChangeValue={onChange}
-                prefix="R$"
-                delimiter="."
-                separator=","
-                precision={2}
-                renderTextInput={(textInputProps) => (
-                  // @ts-ignore
-                  <TextInput
-                    accessibilityLabelledBy={undefined}
-                    accessibilityLanguage={undefined}
-                    {...textInputProps}
-                    style={{ backgroundColor: "transparent" }}
-                    error={!!error}
-                    label="Valor"
-                  />
-                )}
-              />
-            )}
-          />
-          <Controller
-            name="dueDate"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { value }, fieldState: { error } }) => (
-              <TextInput
-                label="Vencimento"
-                error={!!error}
-                value={value}
-                onFocus={() => setOpenDatePicker(true)}
-                style={{ backgroundColor: "transparent" }}
-                accessibilityLabelledBy={undefined}
-                accessibilityLanguage={undefined}
-              />
-            )}
-          />
-
-          {openDatePicker && (
-            // @ts-ignore
-            <RNDateTimePicker value={currentDate} onChange={onChange} />
+    <SafeAreaCustomized isLoading={isLoading}>
+      <TitleWithButtons
+        title="Gastos"
+        onAdd={handleAdd}
+        onDelete={() => setActivateDelete(!activateDelete)}
+        activateDelete={activateDelete}
+      />
+      <ModalDefault open={openModal} onDismiss={handleCancel}>
+        <Text>Add sua renda</Text>
+        <Controller
+          name="font"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={value}
+              label="Fonte"
+              error={!!error}
+              style={{ backgroundColor: "transparent" }}
+              accessibilityLabelledBy={undefined}
+              accessibilityLanguage={undefined}
+            />
           )}
-          <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
-        </ModalDefault>
-        <CustomTable
-          headerItems={header}
-          rows={rows}
-          onEdit={handleEdit}
-          onCheck={onCheck}
-          activateDelete={activateDelete}
-          onDelete={handleDelete}
-          isTotalRed
-          bottomRightLabel="Vencidas"
-          isBottomRightRed={overdueBills > 0}
-          total={total}
-          quantity={overdueBills}
         />
-      </LoadingComponent>
+        <Controller
+          name="amount"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <CurrencyInput
+              value={value}
+              onChangeValue={onChange}
+              prefix="R$"
+              delimiter="."
+              separator=","
+              precision={2}
+              renderTextInput={(textInputProps) => (
+                // @ts-ignore
+                <TextInput
+                  accessibilityLabelledBy={undefined}
+                  accessibilityLanguage={undefined}
+                  {...textInputProps}
+                  style={{ backgroundColor: "transparent" }}
+                  error={!!error}
+                  label="Valor"
+                />
+              )}
+            />
+          )}
+        />
+        <Controller
+          name="dueDate"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { value }, fieldState: { error } }) => (
+            <TextInput
+              label="Vencimento"
+              error={!!error}
+              value={value}
+              onFocus={() => setOpenDatePicker(true)}
+              style={{ backgroundColor: "transparent" }}
+              accessibilityLabelledBy={undefined}
+              accessibilityLanguage={undefined}
+            />
+          )}
+        />
+
+        {openDatePicker && (
+          // @ts-ignore
+          <RNDateTimePicker value={currentDate} onChange={onChange} />
+        )}
+        <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+      </ModalDefault>
+      <CustomTable
+        headerItems={header}
+        rows={rows}
+        onEdit={handleEdit}
+        onCheck={onCheck}
+        activateDelete={activateDelete}
+        onDelete={handleDelete}
+        isTotalRed
+        bottomRightLabel="Vencidas"
+        isBottomRightRed={overdueBills > 0}
+        total={total}
+        quantity={overdueBills}
+      />
       <SnackbarCustom
         showSnackbar={showSnackbar}
         onDismissSnackBar={onDismissSnackBar}

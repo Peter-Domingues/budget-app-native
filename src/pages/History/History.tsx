@@ -76,37 +76,35 @@ const History = () => {
   }, []);
 
   return (
-    <SafeAreaCustomized>
-      <LoadingComponent isLoading={isLoading}>
-        <View style={HistoryStyles.container}>
-          <Text style={HistoryStyles.title}>Histórico</Text>
-          {history?.map((item, index) => {
-            let test: item[] = [];
+    <SafeAreaCustomized isLoading={isLoading}>
+      <View style={HistoryStyles.container}>
+        <Text style={HistoryStyles.title}>Histórico</Text>
+        {history?.map((item, index) => {
+          let test: item[] = [];
 
-            item.Months.map((month) => {
-              const amount = month.MonthIncoming - month.MonthSpendings;
-              const newItem: item = {
-                title: convertMonth(month.Month),
-                value: amount,
-                goTo: "Renda",
-                isMoney: true,
-                isNegative: amount < 0,
-              };
+          item.Months.map((month) => {
+            const amount = month.MonthIncoming - month.MonthSpendings;
+            const newItem: item = {
+              title: convertMonth(month.Month),
+              value: amount,
+              goTo: "Renda",
+              isMoney: true,
+              isNegative: amount < 0,
+            };
 
-              test.push(newItem);
-            });
+            test.push(newItem);
+          });
 
-            return (
-              <AccordionCard
-                key={index}
-                title={item._id.year.toString()}
-                subtitle={item.YearProfit.toString()}
-                items={test}
-              />
-            );
-          })}
-        </View>
-      </LoadingComponent>
+          return (
+            <AccordionCard
+              key={index}
+              title={item._id.year.toString()}
+              subtitle={item.YearProfit.toString()}
+              items={test}
+            />
+          );
+        })}
+      </View>
     </SafeAreaCustomized>
   );
 };

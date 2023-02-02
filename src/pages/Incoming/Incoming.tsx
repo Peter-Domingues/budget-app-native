@@ -165,94 +165,91 @@ const Incoming = () => {
   };
 
   return (
-    <SafeAreaCustomized>
-      <LoadingComponent isLoading={isLoading}>
-        <TitleWithButtons
-          title="Renda"
-          onAdd={handleAdd}
-          onDelete={() => setActivateDelete(!activateDelete)}
-          activateDelete={activateDelete}
-        />
-        <ModalDefault open={openModal} onDismiss={handleCancel}>
-          <Text>Add sua renda</Text>
-          <Controller
-            name="font"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextInput
-                onChangeText={onChange}
-                value={value}
-                label="Fonte"
-                error={!!error}
-                style={{ backgroundColor: "transparent" }}
-                accessibilityLabelledBy={undefined}
-                accessibilityLanguage={undefined}
-              />
-            )}
-          />
-          <Controller
-            name="amount"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <CurrencyInput
-                value={value}
-                onChangeValue={onChange}
-                prefix="R$"
-                delimiter="."
-                separator=","
-                precision={2}
-                renderTextInput={(textInputProps) => (
-                  // @ts-ignore
-                  <TextInput
-                    accessibilityLabelledBy={undefined}
-                    accessibilityLanguage={undefined}
-                    {...textInputProps}
-                    style={{ backgroundColor: "transparent" }}
-                    error={!!error}
-                    label="Valor"
-                  />
-                )}
-              />
-            )}
-          />
-          <Controller
-            name="dueDate"
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { value }, fieldState: { error } }) => (
-              <TextInput
-                label="Vencimento"
-                error={!!error}
-                value={value}
-                onFocus={() => setOpenDatePicker(true)}
-                style={{ backgroundColor: "transparent" }}
-                accessibilityLabelledBy={undefined}
-                accessibilityLanguage={undefined}
-              />
-            )}
-          />
-
-          {openDatePicker && (
-            // @ts-ignore
-            <RNDateTimePicker value={currentDate} onChange={onChange} />
+    <SafeAreaCustomized isLoading={isLoading}>
+      <TitleWithButtons
+        title="Renda"
+        onAdd={handleAdd}
+        onDelete={() => setActivateDelete(!activateDelete)}
+        activateDelete={activateDelete}
+      />
+      <ModalDefault open={openModal} onDismiss={handleCancel}>
+        <Text>Add sua renda</Text>
+        <Controller
+          name="font"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={value}
+              label="Fonte"
+              error={!!error}
+              style={{ backgroundColor: "transparent" }}
+              accessibilityLabelledBy={undefined}
+              accessibilityLanguage={undefined}
+            />
           )}
-          <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
-        </ModalDefault>
-        <CustomTable
-          headerItems={header}
-          rows={rows}
-          onEdit={handleEdit}
-          onCheck={onCheck}
-          activateDelete={activateDelete}
-          onDelete={handleDelete}
-          hideBottomLeft
-          total={total}
-          quantity={rows.length}
         />
-      </LoadingComponent>
+        <Controller
+          name="amount"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <CurrencyInput
+              value={value}
+              onChangeValue={onChange}
+              prefix="R$"
+              delimiter="."
+              separator=","
+              precision={2}
+              renderTextInput={(textInputProps) => (
+                // @ts-ignore
+                <TextInput
+                  accessibilityLabelledBy={undefined}
+                  accessibilityLanguage={undefined}
+                  {...textInputProps}
+                  style={{ backgroundColor: "transparent" }}
+                  error={!!error}
+                  label="Valor"
+                />
+              )}
+            />
+          )}
+        />
+        <Controller
+          name="dueDate"
+          rules={{ required: true }}
+          control={control}
+          render={({ field: { value }, fieldState: { error } }) => (
+            <TextInput
+              label="Vencimento"
+              error={!!error}
+              value={value}
+              onFocus={() => setOpenDatePicker(true)}
+              style={{ backgroundColor: "transparent" }}
+              accessibilityLabelledBy={undefined}
+              accessibilityLanguage={undefined}
+            />
+          )}
+        />
 
+        {openDatePicker && (
+          // @ts-ignore
+          <RNDateTimePicker value={currentDate} onChange={onChange} />
+        )}
+        <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+      </ModalDefault>
+      <CustomTable
+        headerItems={header}
+        rows={rows}
+        onEdit={handleEdit}
+        onCheck={onCheck}
+        activateDelete={activateDelete}
+        onDelete={handleDelete}
+        hideBottomLeft
+        total={total}
+        quantity={rows.length}
+      />
       <SnackbarCustom
         showSnackbar={showSnackbar}
         onDismissSnackBar={onDismissSnackBar}
