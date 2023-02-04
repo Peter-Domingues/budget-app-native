@@ -4,33 +4,10 @@ import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import HistoryStyles from "./styles";
 import AccordionCard from "../../components/AccordionCard";
 import { getHistory } from "../../api/HistoryApi";
-import LoadingComponent from "../../components/LoadingComponent";
-interface id {
-  year: number;
-}
-interface Months {
-  Month: number;
-  MonthSpendings: number;
-  MonthIncoming: number;
-}
-interface item {
-  title: string | undefined;
-  value: number;
-  goTo: string;
-  isMoney: boolean;
-  isNegative: boolean;
-}
-
-interface History {
-  _id: id;
-  TotalIncoming: number;
-  TotalBillss: number;
-  Months: Months[];
-  YearProfit: number;
-}
+import { HistoryType, item } from "../../types/ResponseTypes";
 
 const History = () => {
-  const [history, setHistory] = useState<History[]>();
+  const [history, setHistory] = useState<HistoryType[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const convertMonth = (month: number) => {
     switch (month) {

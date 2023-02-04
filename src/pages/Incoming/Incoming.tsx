@@ -12,15 +12,7 @@ import RNDateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { editIncoming, getIncoming, postIncoming } from "../../api/IncomingApi";
 import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
-import LoadingComponent from "../../components/LoadingComponent";
-
-interface rowItems {
-  id: string;
-  font: String;
-  amount: number;
-  dueDate: String;
-  isChecked: boolean;
-}
+import { rowItems } from "../../types/ResponseTypes";
 
 const Incoming = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());

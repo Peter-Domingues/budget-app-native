@@ -15,21 +15,7 @@ import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
 import { month } from "../../helpers/DateHelper";
 import { useDispatch, useSelector } from "react-redux";
 import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
-
-interface rowItems {
-  id: string;
-  font: String;
-  amount: number;
-  dueDate: String;
-  isChecked: boolean;
-}
-interface responseRows {
-  id: string;
-  font: String;
-  amount: number;
-  dueDate: string | number | Date;
-  isChecked: boolean;
-}
+import { responseRows, rowItems } from "../../types/ResponseTypes";
 
 const Bills = () => {
   const dispatch = useDispatch();
@@ -48,7 +34,7 @@ const Bills = () => {
   const [overdueBills, setOverdueBills] = useState<number>(0);
   const currentMonth = month();
   const safeAreaCustomizedReducers = useSelector(
-    (state) => state.safeAreaCustomizedReducers
+    (state: any) => state.safeAreaCustomizedReducers
   );
 
   const header = [
