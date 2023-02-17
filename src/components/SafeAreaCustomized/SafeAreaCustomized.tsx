@@ -10,11 +10,21 @@ import { useDispatch, useSelector } from "react-redux";
 import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
 import LoadingComponent from "../../components/LoadingComponent";
 
-const SafeAreaCustomized = ({ children, isLoading }) => {
+interface SafeAreaCustomizedProps {
+  children: any;
+  isLoading: boolean;
+  canRefresh?: boolean;
+}
+
+const SafeAreaCustomized: React.FC<SafeAreaCustomizedProps> = ({
+  children,
+  isLoading,
+  canRefresh = false,
+}) => {
   const dispatch = useDispatch();
   const safeArea = useSafeAreaInsets();
   const safeAreaCustomizedReducers = useSelector(
-    (state) => state.safeAreaCustomizedReducers
+    (state: any) => state.safeAreaCustomizedReducers
   );
 
   const onRefresh = useCallback(() => {
@@ -38,17 +48,24 @@ const SafeAreaCustomized = ({ children, isLoading }) => {
             flex: 1,
           }}
         >
-          <StatusBar backgroundColor={Colors.green100} />
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={safeAreaCustomizedReducers.refreshing}
-                onRefresh={onRefresh}
-              />
-            }
-          >
-            {children}
-          </ScrollView>
+          <>
+            <StatusBar backgroundColor={Colors.green100} />
+            {canRefresh ? (
+              <ScrollView
+                scrollEnabled={false}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={safeAreaCustomizedReducers.refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+              >
+                {children}
+              </ScrollView>
+            ) : (
+              children
+            )}
+          </>
         </View>
       </SafeAreaProvider>
     </LoadingComponent>

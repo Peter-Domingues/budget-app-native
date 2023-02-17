@@ -1,4 +1,4 @@
-# Budget App
+# Budget App Front-End
 
 A brief description of what this project does and who it's for
 

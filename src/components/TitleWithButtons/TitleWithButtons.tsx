@@ -5,35 +5,53 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../themes/colors";
 import { IconButton } from "react-native-paper";
 
-const TitleWithButtons = (props) => {
+interface TitleWithButtonsProps {
+  isEdit?: boolean;
+  activateDelete: boolean;
+  title: string;
+  onDelete: any;
+  onAdd: any;
+}
+
+const TitleWithButtons: React.FC<TitleWithButtonsProps> = ({
+  isEdit = false,
+  activateDelete,
+  title,
+  onDelete,
+  onAdd,
+}) => {
   return (
     <View style={TitleWithButtonsStyles.container}>
-      {props.isEdit ? (
+      {isEdit ? (
         <View style={TitleWithButtonsStyles.emptyButton} />
       ) : (
         <IconButton
           icon={() => (
             <MaterialIcons
-              name={props.activateDelete ? "close" : "delete-forever"}
+              name={activateDelete ? "close" : "delete-forever"}
               color={Colors.red}
               size={26}
             />
           )}
           size={20}
-          onPress={props.onDelete}
+          onPress={onDelete}
+          accessibilityLabelledBy={undefined}
+          accessibilityLanguage={undefined}
         />
       )}
-      <Text style={TitleWithButtonsStyles.title}>{props.title}</Text>
+      <Text style={TitleWithButtonsStyles.title}>{title}</Text>
       <IconButton
         icon={() => (
           <MaterialIcons
-            name={props.isEdit ? "edit" : "add"}
+            name={isEdit ? "edit" : "add"}
             color={Colors.green100}
             size={26}
           />
         )}
         size={20}
-        onPress={props.onAdd}
+        onPress={onAdd}
+        accessibilityLabelledBy={undefined}
+        accessibilityLanguage={undefined}
       />
     </View>
   );

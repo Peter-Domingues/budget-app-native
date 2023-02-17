@@ -111,7 +111,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
   return (
     <View style={TableStyles.container}>
       <Header headerItems={headerItems} />
-      <ScrollView>
+      <ScrollView persistentScrollbar showsVerticalScrollIndicator>
         {rows.map((row, index) => (
           <Row key={index}>
             <Cell cellWidth={120}>

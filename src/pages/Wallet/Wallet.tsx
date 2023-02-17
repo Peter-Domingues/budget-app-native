@@ -16,6 +16,7 @@ const Wallet = () => {
   const [spending, setSpending] = useState<number>(0);
   const [paidBills, setPaidBills] = useState<number>(0);
   const [bills, setBills] = useState<number>(0);
+  const [profit, setProfit] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const currentMonth = month();
   const safeAreaCustomizedReducers = useSelector(
@@ -35,6 +36,7 @@ const Wallet = () => {
         );
         setIsLoading(false);
         setPaidBills(currentBills);
+        setProfit(res[1].data.Total - res[0].data.Total);
       })
       .finally(() =>
         dispatch(SafeAreaCustomizedSlice.actions.IS_REFRESHING(false))
@@ -50,7 +52,7 @@ const Wallet = () => {
   }, [safeAreaCustomizedReducers.refreshing]);
 
   return (
-    <SafeAreaCustomized isLoading={isLoading}>
+    <SafeAreaCustomized isLoading={isLoading} canRefresh>
       <View style={WalletStyles.container}>
         <Text style={WalletStyles.title}>Carteira</Text>
         <AnimatedCard
@@ -80,7 +82,7 @@ const Wallet = () => {
         <AnimatedCard
           cardTitle="Sobras"
           isMoney
-          cardValue="1000"
+          cardValue={profit.toString()}
           goTo="Profit"
         />
       </View>
