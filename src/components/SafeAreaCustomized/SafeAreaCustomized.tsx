@@ -7,7 +7,7 @@ import {
 import Colors from "../../themes/colors";
 import { StatusBar } from "expo-status-bar";
 import { useDispatch, useSelector } from "react-redux";
-import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
+import RefreshSlice from "../../store/reducers/RefreshReducer";
 import LoadingComponent from "../../components/LoadingComponent";
 
 interface SafeAreaCustomizedProps {
@@ -23,12 +23,10 @@ const SafeAreaCustomized: React.FC<SafeAreaCustomizedProps> = ({
 }) => {
   const dispatch = useDispatch();
   const safeArea = useSafeAreaInsets();
-  const safeAreaCustomizedReducers = useSelector(
-    (state: any) => state.safeAreaCustomizedReducers
-  );
+  const refreshReducers = useSelector((state: any) => state.refreshReducers);
 
   const onRefresh = useCallback(() => {
-    dispatch(SafeAreaCustomizedSlice.actions.IS_REFRESHING(true));
+    dispatch(RefreshSlice.actions.IS_REFRESHING(true));
   }, []);
 
   return (
@@ -55,7 +53,7 @@ const SafeAreaCustomized: React.FC<SafeAreaCustomizedProps> = ({
                 scrollEnabled={false}
                 refreshControl={
                   <RefreshControl
-                    refreshing={safeAreaCustomizedReducers.refreshing}
+                    refreshing={refreshReducers.refreshing}
                     onRefresh={onRefresh}
                   />
                 }

@@ -53,7 +53,7 @@ const History = () => {
   }, []);
 
   return (
-    <SafeAreaCustomized isLoading={isLoading}>
+    <SafeAreaCustomized isLoading={isLoading} canRefresh>
       <View style={HistoryStyles.container}>
         <Text style={HistoryStyles.title}>Histórico</Text>
         {history?.map((item, index) => {

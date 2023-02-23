@@ -129,7 +129,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                     )}
                     style={TableStyles.icon}
                     size={20}
-                    onPress={() => onDelete(index)}
+                    onPress={() => onDelete(row)}
                     accessibilityLabelledBy={undefined}
                     accessibilityLanguage={undefined}
                   />

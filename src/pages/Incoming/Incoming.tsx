@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import ModalDefault from "../../components/Modal";
@@ -10,11 +10,19 @@ import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { editIncoming, getIncoming, postIncoming } from "../../api/IncomingApi";
+import {
+  deleteIncoming,
+  editIncoming,
+  getIncoming,
+  postIncoming,
+} from "../../api/IncomingApi";
 import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
 import { rowItems } from "../../types/ResponseTypes";
+import { useSelector, useDispatch } from "react-redux";
+import RefreshSlice from "../../store/reducers/RefreshReducer";
 
 const Incoming = () => {
+  const dispatch = useDispatch();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
@@ -29,6 +37,7 @@ const Incoming = () => {
   const [total, setTotal] = useState<number>(0);
   const today = new Date();
   const month = today.getMonth() + 1;
+  const refreshReducers = useSelector((state: any) => state.refreshReducers);
 
   const header = [
     { title: "Fonte", isNumeric: false, width: 100 },
@@ -49,7 +58,7 @@ const Incoming = () => {
     return new Date(date).toLocaleDateString("pt-BR");
   };
 
-  const getRows = async () => {
+  const getRows = useCallback(async () => {
     setIsLoading(true);
     await getIncoming(month)
       .then((res) => {
@@ -68,13 +77,15 @@ const Incoming = () => {
         setIsLoading(false);
         setTotal(res.data.Total);
       })
-      .finally(() => {})
+      .finally(() => {
+        dispatch(RefreshSlice.actions.REFRESH_ALL(false));
+      })
       .catch((error) => console.log(error));
-  };
+  }, []);
 
   useEffect(() => {
     getRows();
-  }, []);
+  }, [refreshReducers.refreshAll]);
 
   const onDismissSnackBar = () => setShowSnackbar(false);
 
@@ -150,10 +161,15 @@ const Incoming = () => {
     });
   };
 
-  const handleDelete = async (index: number) => {
-    const newRows = [...rows];
-    newRows.splice(index, 1);
-    setRows(newRows);
+  const handleDelete = async (row: rowItems) => {
+    await deleteIncoming(row.id)
+      .then(() => {
+        getRows();
+      })
+      .finally(() => {
+        reset();
+        setOpenModal(false);
+      });
   };
 
   return (

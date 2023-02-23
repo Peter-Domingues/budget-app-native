@@ -6,7 +6,7 @@ import TitleWithButtons from "../../components/TitleWithButtons";
 import PigIcon from "../../svg/Pig";
 import BrokenPig from "../../svg/BrokenPig";
 import CurrencyInput from "react-native-currency-input";
-import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
+import RefreshSlice from "../../store/reducers/RefreshReducer";
 import { useDispatch } from "react-redux";
 import { getHistory } from "../../api/HistoryApi";
 import { postBill } from "../../api/BillsApi";
@@ -22,6 +22,15 @@ const Profit = () => {
   const [pigSize, setPigSize] = useState(20);
   const refInput = useRef<any>(null);
 
+  interface Month {
+    Month: number;
+    MonthIncoming: number;
+    MonthSpendings: number;
+  }
+  interface HistoryResponse {
+    Months: Month[];
+    YearProfit: number;
+  }
   const percentage = (percent: number, totalValue: number) => {
     const toPositive = Math.abs(totalValue);
     const result: number = (percent * toPositive) / 100;
@@ -37,11 +46,15 @@ const Profit = () => {
     setIsLoading(true);
     await getHistory()
       .then((res) => {
-        setSavings(res.data.YearProfit);
+        let allSavings = 0;
+        res.data.map((year: HistoryResponse) => {
+          allSavings = allSavings + year.YearProfit;
+        });
+        setSavings(allSavings);
         console.log(res);
       })
       .finally(() => {
-        dispatch(SafeAreaCustomizedSlice.actions.IS_REFRESHING(false));
+        dispatch(RefreshSlice.actions.IS_REFRESHING(false));
         setIsLoading(false);
       });
   };

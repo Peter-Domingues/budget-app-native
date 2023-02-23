@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import ModalDefault from "../../components/Modal";
@@ -14,8 +14,9 @@ import { editBill, getBill, postBill } from "../../api/BillsApi";
 import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
 import { month } from "../../helpers/DateHelper";
 import { useDispatch, useSelector } from "react-redux";
-import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
+import RefreshSlice from "../../store/reducers/RefreshReducer";
 import { responseRows, rowItems } from "../../types/ResponseTypes";
+import { deleteIncoming } from "../../api/IncomingApi";
 
 const Bills = () => {
   const dispatch = useDispatch();
@@ -33,9 +34,7 @@ const Bills = () => {
   const [total, setTotal] = useState<number>(0);
   const [overdueBills, setOverdueBills] = useState<number>(0);
   const currentMonth = month();
-  const safeAreaCustomizedReducers = useSelector(
-    (state: any) => state.safeAreaCustomizedReducers
-  );
+  const refreshReducers = useSelector((state: any) => state.refreshReducers);
 
   const header = [
     { title: "Fonte", isNumeric: false, width: 100 },
@@ -68,7 +67,7 @@ const Bills = () => {
     setOverdueBills(overdueCount);
   };
 
-  const getRows = async () => {
+  const getRows = useCallback(async () => {
     setIsLoading(true);
     await getBill(currentMonth)
       .then((res) => {
@@ -89,18 +88,14 @@ const Bills = () => {
         handleOverdue(res.data.result);
       })
       .finally(() => {
-        dispatch(SafeAreaCustomizedSlice.actions.IS_REFRESHING(false));
+        dispatch(RefreshSlice.actions.IS_REFRESHING(false));
       })
       .catch((error) => console.log(error));
-  };
-
-  useEffect(() => {
-    getRows();
   }, []);
 
   useEffect(() => {
     getRows();
-  }, [safeAreaCustomizedReducers.refreshing]);
+  }, [refreshReducers.refreshAll]);
 
   const onDismissSnackBar = () => setShowSnackbar(false);
 
@@ -176,10 +171,15 @@ const Bills = () => {
     });
   };
 
-  const handleDelete = async (index: number) => {
-    const newRows = [...rows];
-    newRows.splice(index, 1);
-    setRows(newRows);
+  const handleDelete = async (row: rowItems) => {
+    await deleteIncoming(row.id)
+      .then(() => {
+        getRows();
+      })
+      .finally(() => {
+        reset();
+        setOpenModal(false);
+      });
   };
 
   return (
