@@ -1,3 +1,4 @@
-export interface SafeAreaCustomizedSliceProps {
+export interface RefreshSliceProps {
   refreshing: boolean;
+  refreshAll: boolean;
 }

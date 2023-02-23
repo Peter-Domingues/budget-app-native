@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import SafeAreaCustomizedSlice from "./SafeAreaCustomizedReducer";
+import RefreshSlice from "./RefreshReducer";
 
 const rootReducer = combineReducers({
-  safeAreaCustomizedReducers: SafeAreaCustomizedSlice.reducer,
+  refreshReducers: RefreshSlice.reducer,
 });
 
 export default rootReducer;
