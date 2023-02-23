@@ -32,4 +32,18 @@ async function editIncoming(id, payload) {
   return data;
 }
 
-export { getIncomingByID, getIncoming, postIncoming, editIncoming };
+async function deleteIncoming(id) {
+  const { data } = await axios({
+    method: "delete",
+    url: `http://192.168.1.5:3000/api/incoming/${id}`,
+  });
+  return data;
+}
+
+export {
+  getIncomingByID,
+  getIncoming,
+  postIncoming,
+  editIncoming,
+  deleteIncoming,
+};
