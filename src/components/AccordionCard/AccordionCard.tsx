@@ -60,8 +60,9 @@ const AccordionCard: React.FC<AccordionCardProps> = ({
 
       {expanded ? (
         <View>
-          {items.map((item: item) => (
+          {items.map((item: item, index: number) => (
             <AnimatedCard
+              key={index}
               cardTitle={item.title || ""}
               cardValue={item.value.toString()}
               goTo={item.goTo}
