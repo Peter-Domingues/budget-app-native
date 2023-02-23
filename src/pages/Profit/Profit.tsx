@@ -18,7 +18,6 @@ const Profit = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [savings, setSavings] = useState<number>(0);
   const [temporarySavings, setTemporarySavings] = useState<number>(savings);
-  const [newSavings, setNewSavings] = useState<number>(savings);
   const [pigSize, setPigSize] = useState(20);
   const refInput = useRef<any>(null);
 
@@ -59,11 +58,11 @@ const Profit = () => {
       });
   };
 
-  const editIncoming = async () => {
-    if (savings > temporarySavings) {
+  const editIncoming = async (newSavings: number) => {
+    if (savings > newSavings) {
       const payload = {
         font: "Indefinida",
-        amount: savings - temporarySavings,
+        amount: savings - newSavings,
         dueDate: new Date(),
         isChecked: true,
         type: "bill",
@@ -101,10 +100,6 @@ const Profit = () => {
     setPigSize(percentage(10, temporarySavings));
   }, [temporarySavings]);
 
-  useEffect(() => {
-    editIncoming();
-  }, [newSavings]);
-
   return (
     <SafeAreaCustomized isLoading={isLoading} canRefresh>
       <TitleWithButtons
@@ -141,7 +136,7 @@ const Profit = () => {
           separator=","
           precision={2}
           ref={refInput}
-          onEndEditing={() => setNewSavings(temporarySavings)}
+          onEndEditing={() => editIncoming(temporarySavings)}
           renderTextInput={(textInputProps) => (
             // @ts-ignore
             <TextInput
