@@ -87,6 +87,7 @@ const Bills = () => {
         setTotal(res.data.Total);
         handleOverdue(res.data.result);
       })
+      .catch(() => setIsLoading(false))
       .finally(() => {
         dispatch(RefreshSlice.actions.IS_REFRESHING(false));
       })
@@ -258,6 +259,7 @@ const Bills = () => {
         <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
       </ModalDefault>
       <CustomTable
+        type="conta"
         headerItems={header}
         rows={rows}
         onEdit={handleEdit}

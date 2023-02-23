@@ -77,6 +77,7 @@ const Incoming = () => {
         setIsLoading(false);
         setTotal(res.data.Total);
       })
+      .catch(() => setIsLoading(false))
       .finally(() => {
         dispatch(RefreshSlice.actions.REFRESH_ALL(false));
       })
@@ -248,6 +249,7 @@ const Incoming = () => {
         <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
       </ModalDefault>
       <CustomTable
+        type="renda"
         headerItems={header}
         rows={rows}
         onEdit={handleEdit}

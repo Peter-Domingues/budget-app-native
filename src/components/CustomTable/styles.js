@@ -71,6 +71,16 @@ const TableStyles = StyleSheet.create({
     flexWrap: "wrap",
   },
   icon: { margin: 0 },
+  emptyTable: {
+    display: "flex",
+    flex: 1,
+    maxWidth: "100%",
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default TableStyles;

@@ -31,6 +31,7 @@ interface CustomTableProps {
   isBottomRightRed?: boolean;
   quantity: number;
   hideBottomLeft?: boolean;
+  type: string;
 }
 
 interface HeaderProps {
@@ -63,6 +64,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
   isBottomRightRed,
   quantity,
   hideBottomLeft,
+  type,
 }) => {
   const Header: React.FC<HeaderProps> = ({ headerItems }) => {
     return (
@@ -108,7 +110,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
     return <View style={TableStyles.fontView}>{children}</View>;
   };
 
-  return (
+  return rows.length > 0 ? (
     <View style={TableStyles.container}>
       <Header headerItems={headerItems} />
       <ScrollView persistentScrollbar showsVerticalScrollIndicator>
@@ -204,6 +206,14 @@ const CustomTable: React.FC<CustomTableProps> = ({
           </View>
         )}
       </Bottom>
+    </View>
+  ) : (
+    <View style={TableStyles.emptyTable}>
+      <Text>
+        Parece que você não tem nenhuma {type} ainda, clique no
+        <MaterialIcons name="add" color={Colors.green100} size={26} />
+        para adicionar.
+      </Text>
     </View>
   );
 };

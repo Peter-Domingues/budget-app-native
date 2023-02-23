@@ -26,16 +26,16 @@ const Wallet = () => {
     await Promise.all([getBill(currentMonth), getIncoming(currentMonth)])
       .then((res) => {
         let currentBills = 0;
-        setSpending(res[0].data.Total);
-        setIncoming(res[1].data.Total);
-        setBills(res[0].data.result.length);
-        res[0].data.result.map(
+        setSpending(res[0].data.Total ?? 0);
+        setIncoming(res[1].data.Total ?? 0);
+        setBills(res[0].data.result.length ?? 0);
+        res[0]?.data.result.map(
           (bill: rowItems) => bill.isChecked && currentBills++
         );
-        setIsLoading(false);
         setPaidBills(currentBills);
-        setProfit(res[1].data.Total - res[0].data.Total);
+        setProfit(res[1]?.data.Total - res[0]?.data.Total);
       })
+      .catch(() => setIsLoading(false))
       .finally(() => {
         setIsLoading(false);
         dispatch(RefreshSlice.actions.IS_REFRESHING(false));
