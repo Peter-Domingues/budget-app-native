@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useEffect, useState, useCallback } from "react";
 import { Text, View } from "react-native";
 import SafeAreaCustomized from "../../components/SafeAreaCustomized";
 import AnimatedCard from "../../components/AnimatedCard";
@@ -6,7 +6,7 @@ import WalletStyles from "./styles";
 import { month } from "../../helpers/DateHelper";
 import { getBill } from "../../api/BillsApi";
 import { getIncoming } from "../../api/IncomingApi";
-import SafeAreaCustomizedSlice from "../../store/reducers/SafeAreaCustomizedReducer";
+import RefreshSlice from "../../store/reducers/RefreshReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { rowItems } from "../../types/ResponseTypes";
 
@@ -19,11 +19,9 @@ const Wallet = () => {
   const [profit, setProfit] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const currentMonth = month();
-  const safeAreaCustomizedReducers = useSelector(
-    (state: any) => state.safeAreaCustomizedReducers
-  );
+  const refreshReducers = useSelector((state: any) => state.refreshReducers);
 
-  const init = async () => {
+  const init = useCallback(async () => {
     setIsLoading(true);
     await Promise.all([getBill(currentMonth), getIncoming(currentMonth)])
       .then((res) => {
@@ -38,18 +36,22 @@ const Wallet = () => {
         setPaidBills(currentBills);
         setProfit(res[1].data.Total - res[0].data.Total);
       })
-      .finally(() =>
-        dispatch(SafeAreaCustomizedSlice.actions.IS_REFRESHING(false))
-      );
-  };
-
-  useEffect(() => {
-    init();
+      .finally(() => {
+        setIsLoading(false);
+        dispatch(RefreshSlice.actions.IS_REFRESHING(false));
+        dispatch(RefreshSlice.actions.REFRESH_ALL(false));
+      });
   }, []);
 
   useEffect(() => {
     init();
-  }, [safeAreaCustomizedReducers.refreshing]);
+  }, [refreshReducers.refreshAll]);
+
+  useEffect(() => {
+    if (refreshReducers.refreshing) {
+      init();
+    }
+  }, [refreshReducers.refreshing]);
 
   return (
     <SafeAreaCustomized isLoading={isLoading} canRefresh>
@@ -57,32 +59,32 @@ const Wallet = () => {
         <Text style={WalletStyles.title}>Carteira</Text>
         <AnimatedCard
           cardTitle="Renda"
-          cardValue={incoming.toString()}
+          cardValue={incoming?.toString()}
           goTo="Renda"
           isMoney
         />
         <AnimatedCard
           cardTitle="Gastos"
           isNegative
-          cardValue={spending.toString()}
+          cardValue={spending?.toString()}
           goTo="Bills"
           isMoney
         />
         <AnimatedCard
           cardTitle="Contas"
           isNegative
-          cardValue={bills.toString()}
+          cardValue={bills?.toString()}
           goTo="Bills"
         />
         <AnimatedCard
           cardTitle="Contas Pagas"
-          cardValue={paidBills.toString()}
+          cardValue={paidBills?.toString()}
           goTo="Bills"
         />
         <AnimatedCard
           cardTitle="Sobras"
           isMoney
-          cardValue={profit.toString()}
+          cardValue={profit?.toString()}
           goTo="Profit"
         />
       </View>
