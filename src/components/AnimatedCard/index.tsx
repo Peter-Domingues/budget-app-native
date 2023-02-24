@@ -21,6 +21,7 @@ interface AnimatedCardProps {
   isNegative?: boolean;
   isMoney?: boolean;
   marginTop?: number;
+  cardYear?: string;
 }
 
 interface AnimatedBlockProps {
@@ -38,6 +39,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
   isNegative,
   isMoney,
   marginTop,
+  cardYear,
 }) => {
   const navigation = useNavigation();
   const [show, setShow] = useState(false);
@@ -100,7 +102,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
                   }
                 >
                   {isMoney && "R$ "}
-                  {isNegative && isMoney && "-"}
+                  {isNegative && isMoney}
                   {titleWhite}
                 </Text>
               </TouchableOpacity>
@@ -113,7 +115,10 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
 
   useEffect(() => {
     if (finishedEffect) {
-      navigation.navigate(goTo as never);
+      navigation.navigate(
+        goTo as never,
+        { year: cardYear, month: cardTitle } as never
+      );
       setFinishedEffect(false);
       setShow(false);
     }

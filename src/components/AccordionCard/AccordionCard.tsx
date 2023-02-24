@@ -42,7 +42,14 @@ const AccordionCard: React.FC<AccordionCardProps> = ({
             </Text>
 
             <View style={AccordionCardStyles.whiteBox}>
-              <Text selectable={false} style={AccordionCardStyles.greenTitle}>
+              <Text
+                selectable={false}
+                style={
+                  parseInt(subtitle) < 0
+                    ? AccordionCardStyles.redTitle
+                    : AccordionCardStyles.greenTitle
+                }
+              >
                 R${subtitle}
               </Text>
             </View>
@@ -63,6 +70,7 @@ const AccordionCard: React.FC<AccordionCardProps> = ({
           {items.map((item: item, index: number) => (
             <AnimatedCard
               key={index}
+              cardYear={title}
               cardTitle={item.title || ""}
               cardValue={item.value.toString()}
               goTo={item.goTo}

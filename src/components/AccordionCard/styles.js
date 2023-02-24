@@ -25,6 +25,10 @@ const AccordionCardStyles = StyleSheet.create({
     color: Colors.green100,
     fontSize: 15,
   },
+  redTitle: {
+    color: Colors.red,
+    fontSize: 15,
+  },
   row: {
     flexDirection: "row",
     alignItems: "center",
