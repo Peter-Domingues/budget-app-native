@@ -4,34 +4,29 @@ import { IconButton, Checkbox, Text } from "react-native-paper";
 import TableStyles from "./styles";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../themes/colors";
+import { rowItems } from "../../types/ResponseTypes";
 
 interface headerItems {
-  title: String;
+  title: string;
   isNumeric: boolean;
   width: number;
-}
-
-interface rowItems {
-  font: String;
-  amount: number;
-  dueDate: String;
-  isChecked: boolean;
 }
 
 interface CustomTableProps {
   headerItems: headerItems[];
   rows: rowItems[];
   onEdit?: any;
-  onCheck: any;
-  activateDelete: boolean;
-  onDelete: any;
+  onCheck?: any;
+  activateDelete?: boolean;
+  onDelete?: any;
   isTotalRed?: boolean;
   total: number;
-  bottomRightLabel?: String;
+  bottomRightLabel?: string;
   isBottomRightRed?: boolean;
   quantity: number;
   hideBottomLeft?: boolean;
   type: string;
+  onlyView?: boolean;
 }
 
 interface HeaderProps {
@@ -65,6 +60,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
   quantity,
   hideBottomLeft,
   type,
+  onlyView,
 }) => {
   const Header: React.FC<HeaderProps> = ({ headerItems }) => {
     return (
@@ -114,66 +110,81 @@ const CustomTable: React.FC<CustomTableProps> = ({
     <View style={TableStyles.container}>
       <Header headerItems={headerItems} />
       <ScrollView persistentScrollbar showsVerticalScrollIndicator>
-        {rows.map((row, index) => (
-          <Row key={index}>
-            <Cell cellWidth={120}>
-              <View style={TableStyles.fontView}>
-                {activateDelete ? (
-                  <IconButton
-                    icon={() => (
-                      <MaterialIcons
-                        name="delete-forever"
-                        color={Colors.red}
-                        size={26}
+        {onlyView
+          ? rows.map((row, index) => (
+              <Row key={index}>
+                <Cell cellWidth={40}>{row.type.icon}</Cell>
+                <Cell cellWidth={120}>
+                  <Text>{row.font}</Text>
+                </Cell>
+                <Cell cellWidth={75}>
+                  <Text>R${row.amount}</Text>
+                </Cell>
+                <Cell cellWidth={75}>
+                  <Text>{row.dueDate}</Text>
+                </Cell>
+              </Row>
+            ))
+          : rows.map((row, index) => (
+              <Row key={index}>
+                <Cell cellWidth={120}>
+                  <View style={TableStyles.fontView}>
+                    {activateDelete ? (
+                      <IconButton
+                        icon={() => (
+                          <MaterialIcons
+                            name="delete-forever"
+                            color={Colors.red}
+                            size={26}
+                            accessibilityLabelledBy={undefined}
+                            accessibilityLanguage={undefined}
+                          />
+                        )}
+                        style={TableStyles.icon}
+                        size={20}
+                        onPress={() => onDelete(row)}
                         accessibilityLabelledBy={undefined}
                         accessibilityLanguage={undefined}
                       />
+                    ) : (
+                      <Checkbox
+                        status={row.isChecked ? "checked" : "unchecked"}
+                        onPress={() => onCheck(row)}
+                      />
                     )}
-                    style={TableStyles.icon}
+                    <Text
+                      style={[
+                        row.isChecked && TableStyles.crossedTitle,
+                        { maxWidth: 80 },
+                      ]}
+                    >
+                      {row.font}
+                    </Text>
+                  </View>
+                </Cell>
+                <Cell cellWidth={75}>
+                  <Text>R${row.amount}</Text>
+                </Cell>
+                <Cell cellWidth={75}>
+                  <Text>{row.dueDate}</Text>
+                </Cell>
+                <Cell cellWidth={50}>
+                  <IconButton
+                    icon={() => (
+                      <MaterialIcons
+                        name="edit"
+                        color={Colors.green100}
+                        size={26}
+                      />
+                    )}
                     size={20}
-                    onPress={() => onDelete(row)}
+                    onPress={() => onEdit(row)}
                     accessibilityLabelledBy={undefined}
                     accessibilityLanguage={undefined}
                   />
-                ) : (
-                  <Checkbox
-                    status={row.isChecked ? "checked" : "unchecked"}
-                    onPress={() => onCheck(row)}
-                  />
-                )}
-                <Text
-                  style={[
-                    row.isChecked && TableStyles.crossedTitle,
-                    { maxWidth: 80 },
-                  ]}
-                >
-                  {row.font}
-                </Text>
-              </View>
-            </Cell>
-            <Cell cellWidth={75}>
-              <Text>R${row.amount}</Text>
-            </Cell>
-            <Cell cellWidth={75}>
-              <Text>{row.dueDate}</Text>
-            </Cell>
-            <Cell cellWidth={50}>
-              <IconButton
-                icon={() => (
-                  <MaterialIcons
-                    name="edit"
-                    color={Colors.green100}
-                    size={26}
-                  />
-                )}
-                size={20}
-                onPress={() => onEdit(row)}
-                accessibilityLabelledBy={undefined}
-                accessibilityLanguage={undefined}
-              />
-            </Cell>
-          </Row>
-        ))}
+                </Cell>
+              </Row>
+            ))}
       </ScrollView>
       <Bottom>
         <View style={TableStyles.row}>
@@ -182,9 +193,14 @@ const CustomTable: React.FC<CustomTableProps> = ({
           </View>
           <View style={TableStyles.bottomWhiteCard}>
             <Text
-              style={isTotalRed ? TableStyles.redText : TableStyles.greenText}
+              style={
+                total < 0 || isTotalRed
+                  ? TableStyles.redText
+                  : TableStyles.greenText
+              }
             >
-              {isTotalRed && "-"}R${total}
+              R$ {isTotalRed && "-"}
+              {total}
             </Text>
           </View>
         </View>
