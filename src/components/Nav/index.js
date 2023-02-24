@@ -11,8 +11,24 @@ import Bills from "../../pages/Bills/Bills";
 import Profit from "../../pages/Profit";
 import History from "../../pages/History";
 import CalculatorPage from "../../pages/CalculatorPage";
+import { createStackNavigator } from "@react-navigation/stack";
+import Files from "../../pages/History/components/Files";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function MyStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Historico" component={History} />
+      <Stack.Screen name="Files" component={Files} />
+    </Stack.Navigator>
+  );
+}
 
 const Nav = () => {
   return (
@@ -69,7 +85,7 @@ const Nav = () => {
       />
       <Tab.Screen
         name="History"
-        component={History}
+        component={MyStack}
         options={{
           tabBarLabel: "Historico",
           tabBarIcon: ({ color }) => (
