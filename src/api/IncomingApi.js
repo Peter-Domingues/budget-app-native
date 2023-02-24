@@ -1,9 +1,9 @@
 const axios = require("axios").default;
 
-async function getIncoming(filter) {
+async function getIncoming(month) {
   return axios({
     method: "get",
-    url: `http://192.168.1.5:3000/api/incoming${"?month=" + filter || ""}`,
+    url: `http://192.168.1.5:3000/api/incoming${"?month=" + month || ""}`,
   });
 }
 

@@ -20,9 +20,11 @@ import SnackbarCustom from "../../components/SnackbarCustom/SnackbarCustom";
 import { rowItems } from "../../types/ResponseTypes";
 import { useSelector, useDispatch } from "react-redux";
 import RefreshSlice from "../../store/reducers/RefreshReducer";
+import { month } from "../../helpers/DateHelper";
 
 const Incoming = () => {
   const dispatch = useDispatch();
+
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
@@ -35,8 +37,8 @@ const Incoming = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [rows, setRows] = useState<rowItems[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const today = new Date();
-  const month = today.getMonth() + 1;
+
+  const currentMonth = month();
   const refreshReducers = useSelector((state: any) => state.refreshReducers);
 
   const header = [
@@ -60,7 +62,7 @@ const Incoming = () => {
 
   const getRows = useCallback(async () => {
     setIsLoading(true);
-    await getIncoming(month)
+    await getIncoming(currentMonth)
       .then((res) => {
         console.log(res);
         let newRows: Array<rowItems> = [];
