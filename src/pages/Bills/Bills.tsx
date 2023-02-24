@@ -25,8 +25,8 @@ const Bills = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const [openDatePicker, setOpenDatePicker] = useState<boolean>(false);
   const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
-  const [snackbarType, setsnackbarType] = useState<String>("");
-  const [snackbarText, setSnackbarText] = useState<String>("");
+  const [snackbarType, setsnackbarType] = useState<string>("");
+  const [snackbarText, setSnackbarText] = useState<string>("");
   const [activateDelete, setActivateDelete] = useState<boolean>(false);
   const [currentRowId, setCurrentRowId] = useState();
   const [isLoading, setIsLoading] = useState<boolean>(true);

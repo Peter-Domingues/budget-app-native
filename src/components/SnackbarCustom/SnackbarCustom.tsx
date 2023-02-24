@@ -10,8 +10,8 @@ interface SnackbarCustomProps {
   onDismissSnackBar: any;
   showSnackbar: boolean;
   handleCloseSnackbar: any;
-  snackBarText: String;
-  snackBarType: String;
+  snackBarText: string;
+  snackBarType: string;
 }
 
 const SnackbarCustom: React.FC<SnackbarCustomProps> = ({

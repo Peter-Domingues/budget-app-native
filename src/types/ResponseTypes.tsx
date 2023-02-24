@@ -1,13 +1,14 @@
 export interface rowItems {
   id: string;
-  font: String;
+  font: string;
   amount: number;
-  dueDate: String;
+  dueDate: string;
   isChecked: boolean;
+  type?: any;
 }
 export interface responseRows {
   id: string;
-  font: String;
+  font: string;
   amount: number;
   dueDate: string | number | Date;
   isChecked: boolean;
