@@ -37,7 +37,6 @@ const Files = ({ route }: any) => {
       parseInt(route.params.year)
     )
       .then((res) => {
-        console.log(res);
         let newRows: Array<rowItems> = [];
         res.data.result.map((row: any) =>
           newRows.push({

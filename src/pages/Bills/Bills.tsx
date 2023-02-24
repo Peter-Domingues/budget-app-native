@@ -71,7 +71,6 @@ const Bills = () => {
     setIsLoading(true);
     await getBill(currentMonth)
       .then((res) => {
-        console.log(res);
         let newRows: Array<rowItems> = [];
         res.data.result.map((row: any) =>
           newRows.push({

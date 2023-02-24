@@ -64,7 +64,6 @@ const Incoming = () => {
     setIsLoading(true);
     await getIncoming(currentMonth)
       .then((res) => {
-        console.log(res);
         let newRows: Array<rowItems> = [];
         res.data.result.map((row: any) =>
           newRows.push({

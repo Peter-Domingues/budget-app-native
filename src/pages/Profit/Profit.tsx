@@ -50,7 +50,6 @@ const Profit = () => {
           allSavings = allSavings + year.YearProfit;
         });
         setSavings(allSavings);
-        console.log(res);
       })
       .finally(() => {
         dispatch(RefreshSlice.actions.IS_REFRESHING(false));
