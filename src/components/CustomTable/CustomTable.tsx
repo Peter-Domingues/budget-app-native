@@ -21,7 +21,7 @@ interface rowItems {
 interface CustomTableProps {
   headerItems: headerItems[];
   rows: rowItems[];
-  onEdit: any;
+  onEdit?: any;
   onCheck: any;
   activateDelete: boolean;
   onDelete: any;
