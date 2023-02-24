@@ -6,5 +6,13 @@ async function getHistory() {
     url: `http://192.168.1.5:3000/api/history`,
   });
 }
+async function getSpecificHistory(month, year) {
+  return axios({
+    method: "get",
+    url: `http://192.168.1.5:3000/api/history${"?month=" + month || ""}${
+      "&year=" + year || ""
+    }`,
+  });
+}
 
-export { getHistory };
+export { getHistory, getSpecificHistory };
